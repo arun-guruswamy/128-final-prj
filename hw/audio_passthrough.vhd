@@ -300,10 +300,6 @@ axi_dds : engs128_axi_dds
             left_dds_data_o => left_input_dds,
             right_dds_data_o => right_input_dds,
             
-            -- Debug ports to send to ILA
-            left_dds_phase_inc_dbg_o    => left_dds_phase_inc_dbg_int,
-            right_dds_phase_inc_dbg_o   => right_dds_phase_inc_dbg_int,
-            
             ----------------------------------------------------------------------------
             -- User ports ends
             -- Do not modify the ports beyond this line
