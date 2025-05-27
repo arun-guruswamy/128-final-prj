@@ -347,7 +347,7 @@ axi_dds : engs128_axi_dds
 amplitude_calc : rms
     port map(
         clk => s00_axi_aclk,
-        audio_in => axi_audio_output,
+        audio_in => axi_audio_output(31 downto 8),
         amplitude => amplitude_o
     );  
             

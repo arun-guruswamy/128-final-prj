@@ -64,8 +64,8 @@ begin
   begin
     if rising_edge(clk) then
       if s_sample_counter = WINDOW_SIZE - 1 then -- Window is full - Calculate mean by shifting right (division by WINDOW_SIZE)
-        s_mean_square_out <= (s_accumulator + s_audio_squared) srl WINDOW_SIZE_BITS;
-
+       s_mean_square_out <= resize((s_accumulator + s_audio_squared) srl WINDOW_SIZE_BITS, SQUARED_WIDTH);
+        
         -- Reset accumulator and counter for the next window
         s_accumulator <= (others => '0');
         s_sample_counter <= 0;
