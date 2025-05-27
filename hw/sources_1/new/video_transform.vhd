@@ -20,7 +20,6 @@ entity video_transform is
         s_axis_audio_aclk       : in std_logic;
         s_axis_audio_aresetn    : in std_logic;
         s_axis_audio_tdata      : in std_logic_vector(C_AUDIO_DATA_WIDTH-1 downto 0);
-        s_axis_audio_tstrb      : in std_logic_vector((C_AUDIO_DATA_WIDTH/8)-1 downto 0);
         s_axis_audio_tvalid     : in std_logic;
         s_axis_audio_tlast      : in std_logic;
         s_axis_audio_tready     : out std_logic;
@@ -90,14 +89,14 @@ end COMPONENT;
 
 
 -- FFT config
---type config_state_type is (IDLE, LOAD_CONFIG, SEND_CONFIG, DONE);
---signal config_state : config_state_type := IDLE;
+type config_state_type is (IDLE, LOAD_CONFIG, SEND_CONFIG, DONE);
+signal config_state : config_state_type := IDLE;
 
---type T_CFG_SCALE_SCH is (ZERO, DEFAULT);
---signal cfg_scale_sch : T_CFG_SCALE_SCH := DEFAULT;
---signal scale_sch : std_logic_vector(9 downto 0) := (others => '0');
+type T_CFG_SCALE_SCH is (ZERO, DEFAULT);
+signal cfg_scale_sch : T_CFG_SCALE_SCH := DEFAULT;
+signal scale_sch : std_logic_vector(9 downto 0) := (others => '0');
 signal s_axis_config_tdata : std_logic_vector(15 DOWNTO 0) := (others => '0');
---signal s_axis_config_tvalid, s_axis_config_tready, config_done : std_logic := '0';
+signal s_axis_config_tvalid, s_axis_config_tready, config_done : std_logic := '0';
 -- FFT input truncating
 signal s_axis_data_tdata_int : std_logic_vector(47 DOWNTO 0) := (others => '0');
 -- FFT AXI Output
@@ -118,8 +117,8 @@ FFT_Comp : xfft_0
   PORT MAP (
     aclk => s_axis_audio_aclk,
     s_axis_config_tdata => s_axis_config_tdata,
-    s_axis_config_tvalid => '0',
-    s_axis_config_tready => open,
+    s_axis_config_tvalid => s_axis_config_tvalid,
+    s_axis_config_tready => s_axis_config_tready,
     s_axis_data_tdata => s_axis_data_tdata_int,
     s_axis_data_tvalid => s_axis_audio_tvalid,
     s_axis_data_tready => s_axis_audio_tready,
@@ -162,44 +161,42 @@ RGB : rgb_transform
     );
 
 
---FFT_config_process : process(s_axis_audio_aclk)
---begin
---    if rising_edge(s_axis_audio_aclk) then
---        if s_axis_audio_aresetn = '0' then
---            s_axis_config_tvalid <= '0';
---            s_axis_config_tdata  <= (others => '0');
---            config_done          <= '0';
---            config_state         <= IDLE;
---        else
---            case config_state is
---                when IDLE =>
---                    config_state <= LOAD_CONFIG;
+FFT_config_process : process(s_axis_audio_aclk)
+begin
+    if rising_edge(s_axis_audio_aclk) then
+        if s_axis_audio_aresetn = '0' then
+            s_axis_config_tvalid <= '0';
+            s_axis_config_tdata  <= (others => '0');
+            config_done          <= '0';
+            config_state         <= IDLE;
+        else
+            case config_state is
+                when IDLE =>
+                    config_state <= LOAD_CONFIG;
 
---                when LOAD_CONFIG =>
---                    -- Build config word here
---                    s_axis_config_tdata  <= "0000001101010001"; -- forward FFT + scale schedule
---                    s_axis_config_tvalid <= '1';
---                    config_state         <= SEND_CONFIG;
+                when LOAD_CONFIG =>
+                    -- Build config word here
+                    s_axis_config_tdata  <= "0000000000000001"; -- forward FFT + 0 scale
+                    s_axis_config_tvalid <= '1';
+                    config_state         <= SEND_CONFIG;
 
---                when SEND_CONFIG =>
---                    if s_axis_config_tready = '1' then
---                        s_axis_config_tvalid <= '0';
---                        config_done          <= '1';
---                        config_state         <= DONE;
---                    end if;
+                when SEND_CONFIG =>
+                    if s_axis_config_tready = '1' then
+                        s_axis_config_tvalid <= '0';
+                        config_done          <= '1';
+                        config_state         <= DONE;
+                    end if;
 
---                when DONE =>
---                    -- Stay here
---                    null;
---            end case;
---        end if;
---    end if;
---end process;
+                when DONE =>
+                    -- Stay here
+                    null;
+            end case;
+        end if;
+    end if;
+end process;
 
-
-s_axis_data_tdata_int(23 downto 0) <= s_axis_audio_tdata(31 downto 8);  -- Real
-s_axis_data_tdata_int(47 downto 24) <= (others => '0');    -- Imag
-
+s_axis_data_tdata_int(47 downto 24) <= s_axis_audio_tdata(31 downto 8);  -- Real
+s_axis_data_tdata_int(23 downto 0)  <= (others => '0');                  -- Imag
 
 
 -- For testing

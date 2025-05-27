@@ -121,14 +121,12 @@ component axis_fifo
         s00_axis_aresetn  : in std_logic;
         s00_axis_tready   : out std_logic;
         s00_axis_tdata    : in std_logic_vector(31 downto 0);
-        s00_axis_tstrb    : in std_logic_vector(3 downto 0);
         s00_axis_tlast    : in std_logic;
         s00_axis_tvalid   : in std_logic;
         m00_axis_aclk     : in std_logic;
         m00_axis_aresetn  : in std_logic;
         m00_axis_tvalid   : out std_logic;
         m00_axis_tdata    : out std_logic_vector(31 downto 0);
-        m00_axis_tstrb    : out std_logic_vector(3 downto 0);
         m00_axis_tlast    : out std_logic;
         m00_axis_tready   : in std_logic
     );
@@ -147,7 +145,6 @@ component video_transform
         s_axis_audio_aclk    : in std_logic;
         s_axis_audio_aresetn : in std_logic;
         s_axis_audio_tdata   : in std_logic_vector(31 downto 0);
-        s_axis_audio_tstrb   : in std_logic_vector(3 downto 0);
         s_axis_audio_tvalid  : in std_logic;
         s_axis_audio_tlast   : in std_logic;
         s_axis_audio_tready  : out std_logic;
@@ -226,7 +223,6 @@ axis_fifo_inst : entity work.axis_fifo
         s00_axis_aresetn  => resetn,
         s00_axis_tvalid   => axis_tx_valid,
         s00_axis_tdata    => axis_tx_data,
-        s00_axis_tstrb    => axis_tx_strb,
         s00_axis_tlast    => axis_tx_last,
         s00_axis_tready   => axis_tx_ready,
 
@@ -235,7 +231,6 @@ axis_fifo_inst : entity work.axis_fifo
         m00_axis_aresetn  => resetn,
         m00_axis_tvalid   => axis_rx_valid,
         m00_axis_tdata    => axis_rx_data,
-        m00_axis_tstrb    => axis_rx_strb,
         m00_axis_tlast    => axis_rx_last,
         m00_axis_tready   => axis_rx_ready
     );
@@ -254,7 +249,6 @@ video_transform_inst : entity work.video_transform
         s_axis_audio_aclk    => clk,
         s_axis_audio_aresetn => resetn,
         s_axis_audio_tdata   => axis_rx_data,
-        s_axis_audio_tstrb   => axis_rx_strb,
         s_axis_audio_tvalid  => axis_rx_valid,
         s_axis_audio_tlast   => axis_rx_last,
         s_axis_audio_tready  => axis_rx_ready,
