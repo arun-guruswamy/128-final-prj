@@ -33,6 +33,8 @@ entity audio_passthrough is
         ac_adc_data_i : in STD_LOGIC;
         ac_adc_lrclk_o : out STD_LOGIC;
         
+        amplitude_o : out std_logic_vector(47 downto 0);
+        
 		-- Axi Responder/Slave Bus Interface S00_AXI
 		dds_enable_i    : in std_logic;
         dds_reset_i     : in std_logic;
@@ -88,6 +90,8 @@ signal right_input_reciever : std_logic_vector(AC_DATA_WIDTH-1 downto 0) := (oth
 -- Selected audio data to AXI transmitter
 signal left_input_to_axi_transmitter  : std_logic_vector(AC_DATA_WIDTH-1 downto 0) := (others => '0');
 signal right_input_to_axi_transmitter : std_logic_vector(AC_DATA_WIDTH-1 downto 0) := (others => '0');
+
+signal axi_audio_output : std_logic_vector(C_AXI_STREAM_DATA_WIDTH-1 downto 0) := (others => '0');
 
 ----------------------------------------------------------------------------
 -- Component declarations
@@ -228,6 +232,14 @@ component engs128_axi_dds is
 end component engs128_axi_dds;
 ----------------------------------------------------------------------------
 
+component rms is 
+    port (
+        clk : in std_logic;
+        audio_in : in std_logic_vector(23 downto 0);
+        amplitude : out std_logic_vector(47 downto 0) 
+    );
+end component rms;
+
 begin
 
 ----------------------------------------------------------------------------
@@ -286,7 +298,7 @@ axi_tx : axi_transmitter
 		m00_axis_tready   => m00_axis_tready,
 		
 		m00_axis_tvalid   => m00_axis_tvalid,
-		m00_axis_tdata    => m00_axis_tdata,
+		m00_axis_tdata    => axi_audio_output,
 		m00_axis_tstrb    => m00_axis_tstrb,
 		m00_axis_tlast    => m00_axis_tlast);			
 
@@ -331,6 +343,14 @@ axi_dds : engs128_axi_dds
             s00_axi_rvalid	=>s00_axi_rvalid,
             s00_axi_rready	=>s00_axi_rready);
             
+-- Amplitude        
+amplitude_calc : rms
+    port map(
+        clk => s00_axi_aclk,
+        audio_in => axi_audio_output,
+        amplitude => amplitude_o
+    );  
+            
 ---------------------------------------------------------------------------- 
 -- Audio data logic
 ---------------------------------------------------------------------------- 
@@ -351,6 +371,9 @@ end process AudioInput;
 
 -- Mute enable switch (ACTIVE LOW)
 ac_mute_n_o <= not(ac_mute_en_i);
+
+-- Axi transmitter audio output 
+m00_axis_tdata <= axi_audio_output;
 
 
 end Behavioral;

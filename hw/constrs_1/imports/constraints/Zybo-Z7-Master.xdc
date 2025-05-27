@@ -10,8 +10,8 @@
 
 
 ##Switches
-#set_property -dict {PACKAGE_PIN G15 IOSTANDARD LVCMOS33} [get_ports {fir_select_i[0]}]
-#set_property -dict {PACKAGE_PIN P15 IOSTANDARD LVCMOS33} [get_ports ac_adc_data_i_0]
+set_property -dict {PACKAGE_PIN G15 IOSTANDARD LVCMOS33} [get_ports toggle]
+set_property -dict {PACKAGE_PIN P15 IOSTANDARD LVCMOS33} [get_ports dds_reset_i_0]
 set_property -dict {PACKAGE_PIN W13 IOSTANDARD LVCMOS33} [get_ports ac_mute_en_i_0]
 set_property -dict {PACKAGE_PIN T16 IOSTANDARD LVCMOS33} [get_ports mux_select_0]
 
@@ -67,18 +67,18 @@ set_property -dict {PACKAGE_PIN N17 IOSTANDARD LVCMOS33} [get_ports iic_sda_io]
 
 
 #HDMI RX
-set_property -dict { PACKAGE_PIN W18   IOSTANDARD LVCMOS33 } [get_ports { hdmi_in_ddc_scl_io }]; #IO_L22P_T3_34 Sch=hdmi_rx_scl
-set_property -dict { PACKAGE_PIN Y19   IOSTANDARD LVCMOS33 } [get_ports { hdmi_in_ddc_sda_io }]; #IO_L17N_T2_34 Sch=hdmi_rx_sda
-set_property -dict { PACKAGE_PIN U19   IOSTANDARD TMDS_33  } [get_ports { hdmi_in_clk_n }]; #IO_L12N_T1_MRCC_34 Sch=hdmi_rx_clk_n
-create_clock -period 13.461 -waveform {0.000 6.7305} [get_ports hdmi_in_clk_p]
-set_property -dict { PACKAGE_PIN W20   IOSTANDARD TMDS_33  } [get_ports { hdmi_in_data_n[0] }]; #IO_L16N_T2_34 Sch=hdmi_rx_n[0]
-set_property -dict { PACKAGE_PIN V20   IOSTANDARD TMDS_33  } [get_ports { hdmi_in_data_p[0] }]; #IO_L16P_T2_34 Sch=hdmi_rx_p[0]
-set_property -dict { PACKAGE_PIN U20   IOSTANDARD TMDS_33  } [get_ports { hdmi_in_data_n[1] }]; #IO_L15N_T2_DQS_34 Sch=hdmi_rx_n[1]
-set_property -dict { PACKAGE_PIN T20   IOSTANDARD TMDS_33  } [get_ports { hdmi_in_data_p[1] }]; #IO_L15P_T2_DQS_34 Sch=hdmi_rx_p[1]
-set_property -dict { PACKAGE_PIN P20   IOSTANDARD TMDS_33  } [get_ports { hdmi_in_data_n[2] }]; #IO_L14N_T2_SRCC_34 Sch=hdmi_rx_n[2]
-set_property -dict { PACKAGE_PIN N20   IOSTANDARD TMDS_33  } [get_ports { hdmi_in_data_p[2] }]; #IO_L14P_T2_SRCC_34 Sch=hdmi_rx_p[2]
+#set_property -dict { PACKAGE_PIN W18   IOSTANDARD LVCMOS33 } [get_ports { hdmi_in_ddc_scl_io }]; #IO_L22P_T3_34 Sch=hdmi_rx_scl
+#set_property -dict { PACKAGE_PIN Y19   IOSTANDARD LVCMOS33 } [get_ports { hdmi_in_ddc_sda_io }]; #IO_L17N_T2_34 Sch=hdmi_rx_sda
+#set_property -dict { PACKAGE_PIN U19   IOSTANDARD TMDS_33  } [get_ports { hdmi_in_clk_n }]; #IO_L12N_T1_MRCC_34 Sch=hdmi_rx_clk_n
+#create_clock -period 13.461 -waveform {0.000 6.7305} [get_ports hdmi_in_clk_p]
+#set_property -dict { PACKAGE_PIN W20   IOSTANDARD TMDS_33  } [get_ports { hdmi_in_data_n[0] }]; #IO_L16N_T2_34 Sch=hdmi_rx_n[0]
+#set_property -dict { PACKAGE_PIN V20   IOSTANDARD TMDS_33  } [get_ports { hdmi_in_data_p[0] }]; #IO_L16P_T2_34 Sch=hdmi_rx_p[0]
+#set_property -dict { PACKAGE_PIN U20   IOSTANDARD TMDS_33  } [get_ports { hdmi_in_data_n[1] }]; #IO_L15N_T2_DQS_34 Sch=hdmi_rx_n[1]
+#set_property -dict { PACKAGE_PIN T20   IOSTANDARD TMDS_33  } [get_ports { hdmi_in_data_p[1] }]; #IO_L15P_T2_DQS_34 Sch=hdmi_rx_p[1]
+#set_property -dict { PACKAGE_PIN P20   IOSTANDARD TMDS_33  } [get_ports { hdmi_in_data_n[2] }]; #IO_L14N_T2_SRCC_34 Sch=hdmi_rx_n[2]
+#set_property -dict { PACKAGE_PIN N20   IOSTANDARD TMDS_33  } [get_ports { hdmi_in_data_p[2] }]; #IO_L14P_T2_SRCC_34 Sch=hdmi_rx_p[2]
 
-set_property -dict { PACKAGE_PIN W19   IOSTANDARD LVCMOS33 } [get_ports { hdmi_in_hpd_tri_o }]; #IO_L22N_T3_34 Sch=hdmi_rx_hpd
+#set_property -dict { PACKAGE_PIN W19   IOSTANDARD LVCMOS33 } [get_ports { hdmi_in_hpd_tri_o }]; #IO_L22N_T3_34 Sch=hdmi_rx_hpd
 
 ##HDMI RX CEC (Zybo Z7-20 only)
 #set_property -dict { PACKAGE_PIN Y8    IOSTANDARD LVCMOS33 } [get_ports { hdmi_rx_cec }]; #IO_L14N_T2_SRCC_13 Sch=hdmi_rx_cec
@@ -200,8 +200,8 @@ set_property -dict { PACKAGE_PIN G18   IOSTANDARD LVCMOS33 } [get_ports { hdmi_o
 #set_property PACKAGE_PIN W9 [get_ports {netic19_w9}]; #IO_L16N_T2_13
 #set_property PACKAGE_PIN Y9 [get_ports {netic19_y9}]; #IO_L14P_T2_SRCC_13
 
-set_false_path -from [get_cells -hierarchical -filter {NAME =~ "*left_input_to_axi_transmitter_reg[*]"}] -to [get_cells -hierarchical -filter {NAME =~ "*reg_metastable_reg[*]"}]
-set_false_path -from [get_cells -hierarchical -filter {NAME =~ "*right_input_to_axi_transmitter_reg[*]"}] -to [get_cells -hierarchical -filter {NAME =~ "*reg_metastable_reg[*]"}]
+#set_false_path -from [get_cells -hierarchical -filter {NAME =~ "*left_input_to_axi_transmitter_reg[*]"}] -to [get_cells -hierarchical -filter {NAME =~ "*reg_metastable_reg[*]"}]
+#set_false_path -from [get_cells -hierarchical -filter {NAME =~ "*right_input_to_axi_transmitter_reg[*]"}] -to [get_cells -hierarchical -filter {NAME =~ "*reg_metastable_reg[*]"}]
 
-set_false_path -from [get_cells -hierarchical -filter {NAME =~ *fifo_2_reg*}] -to [get_cells -hierarchical -filter {NAME =~ *peak_bin_int_reg* || NAME =~ *peak_bin_var_reg* || NAME =~ *max_mag_var_reg*}]
+#set_false_path -from [get_cells -hierarchical -filter {NAME =~ *fifo_2_reg*}] -to [get_cells -hierarchical -filter {NAME =~ *peak_bin_int_reg* || NAME =~ *peak_bin_var_reg* || NAME =~ *max_mag_var_reg*}]
 

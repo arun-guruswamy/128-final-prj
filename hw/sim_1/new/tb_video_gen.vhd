@@ -28,6 +28,7 @@ architecture Behavioral of video_gen_tb is
     component video_gen
         Port (
             pxl_clk         : in  std_logic;
+            vsync_i : in std_logic;
             active_video_i  : in  std_logic;
             toggle          : in  std_logic;
             pxl_o           : out std_logic_vector(23 downto 0)
@@ -112,6 +113,7 @@ begin
     dut_video_gen : video_gen
         port map (
             pxl_clk        => tb_pxl_clk,
+            vsync_i => tb_vtc_vsync,
             active_video_i => tb_active_video_i, -- Driven by VTC_INST
             toggle         => tb_toggle,
             pxl_o          => tb_pxl_o
@@ -129,11 +131,8 @@ begin
     -- Stimulus Process (includes reset for VTC)
     stimulus_process : process
     begin
-        report "Starting Testbench Simulation for video_gen with VTC";
-
         -- Apply Reset to VTC
         tb_vtc_resetn <= '0';
-        report "Toggle set to '0'. VTC Reset Applied.";
         wait for PXL_CLK_PERIOD * 20; -- Hold reset
 
         tb_vtc_resetn <= '1';

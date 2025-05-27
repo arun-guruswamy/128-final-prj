@@ -34,7 +34,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity video_gen is
 Port ( 
    pxl_clk  : in  std_logic;
+   vsync_i : in std_logic;
    active_video_i : in std_logic;
+   amplitude : in std_logic_vector(47 downto 0);
    toggle : in std_logic;
 --   amplitude : in std_logic_vector(31 downto 0);
    
@@ -59,7 +61,10 @@ begin
 pixel_counter : process(pxl_clk)
 begin
     if rising_edge(pxl_clk) then
-        if active_video_i = '1' then
+        if vsync_i = '1' then
+            x_coord <= 0;
+            y_coord <= 0;
+        elsif active_video_i = '1' then
             -- Update X coordinate
             if x_coord = SCREEN_WIDTH-1 then
                 x_coord <= 0;  
@@ -80,10 +85,14 @@ generate_bits: process(pxl_clk)
 begin
     if rising_edge(pxl_clk) then
         if active_video_i = '1' then 
-            if x_coord > 100 and x_coord < 150 and y_coord > 100 and y_coord < 150 then
-                pxl_int <= x"f63f0f";
+            if toggle = '1' then
+                if x_coord > 100 and x_coord < 150 and y_coord > 100 and y_coord < 150 then
+                    pxl_int <= x"f63f0f";
+                else 
+                    pxl_int <= x"000000";  
+                end if;
             else 
-                pxl_int <= x"000000";  
+                pxl_int <= x"f0333f";
             end if;
         else 
             pxl_int <= x"000000";  
@@ -92,6 +101,6 @@ end if;
     
 end process generate_bits;
 
-pxl_o <= pxl_int when toggle = '1' else x"f0333f";
+pxl_o <= pxl_int;
 
 end Behavioral;
