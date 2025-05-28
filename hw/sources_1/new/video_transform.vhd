@@ -68,8 +68,7 @@ COMPONENT fft_axi_rx
     s_axis_data_tready  : OUT STD_LOGIC;
     s_axis_data_tlast   : IN STD_LOGIC;
     
-    peak_freq_mag       : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-    peak_bin            : OUT STD_LOGIC_VECTOR(8 DOWNTO 0)
+    peak_bin            : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
     );
 end COMPONENT;
 -------------------- RGB_TRANSFORM Component --------------------
@@ -82,7 +81,7 @@ COMPONENT rgb_transform
         s_axis_resetn : IN  STD_LOGIC;
         mute_en_not   : IN  STD_LOGIC;
         active_video_out : IN STD_LOGIC;
-        peak_bin      : IN  STD_LOGIC_VECTOR(8 DOWNTO 0);
+        peak_bin      : IN  STD_LOGIC_VECTOR(7 DOWNTO 0);
         video_in      : IN  STD_LOGIC_VECTOR(C_VIDEO_DATA_WIDTH-1 downto 0);
         video_out     : OUT STD_LOGIC_VECTOR(C_VIDEO_DATA_WIDTH-1 downto 0)
     );
@@ -110,7 +109,7 @@ signal event_frame_started, event_tlast_unexpected, event_tlast_missing, event_s
 
 
 -- FFT_AXI_RX
-signal peak_bin_int : std_logic_vector(8 DOWNTO 0) := (others => '0');
+signal peak_bin_int : std_logic_vector(7 DOWNTO 0) := (others => '0');
 
 begin
 
@@ -147,7 +146,6 @@ FFT_AXI : fft_axi_rx
     s_axis_data_tready => m_axis_data_tready,
     s_axis_data_tlast => m_axis_data_tlast,
     
-    peak_freq_mag => open,
     peak_bin => peak_bin_int
     );
 

@@ -10,7 +10,7 @@ architecture Behavioral of tb_all is
 
 constant CLK_PERIOD : time := 10 ns;
 constant AUDIO_DATA_WIDTH : integer := 24;
-signal sine_data : std_logic_vector(AUDIO_DATA_WIDTH-1 downto 0);
+--signal sine_data : std_logic_vector(AUDIO_DATA_WIDTH-1 downto 0);
 --signal data_in   : std_logic;
 signal bit_count : integer range 0 to AUDIO_DATA_WIDTH-1 := 0;
 constant SINE_FREQ   : real := 440.0;             -- Hz (A4 note)
@@ -38,7 +38,7 @@ signal ac_adc_lrclk_o   : std_logic;
 -- AXI signals
 signal tvalid, tready, tlast : std_logic := '0';
 signal tdata  : std_logic_vector(31 downto 0);
-signal tstrb  : std_logic_vector(3 downto 0);
+
 
 -- Video data
 signal video_in   : std_logic_vector(23 downto 0) := x"FF0000";
@@ -60,6 +60,8 @@ signal axis_rx_valid, axis_rx_ready, axis_rx_last : std_logic;
 signal axis_rx_data : std_logic_vector(31 downto 0);
 signal axis_rx_strb : std_logic_vector(3 downto 0);
 
+-- Active Video Out
+signal active_video_out : std_logic := '0';
 
 component audio_passthrough
     generic (
@@ -105,7 +107,6 @@ component audio_passthrough
         m00_axis_aresetn : in std_logic;
         m00_axis_tvalid  : out std_logic;
         m00_axis_tdata   : out std_logic_vector(31 downto 0);
-        m00_axis_tstrb   : out std_logic_vector(3 downto 0);
         m00_axis_tlast   : out std_logic;
         m00_axis_tready  : in std_logic
     );
@@ -140,6 +141,7 @@ component video_transform
     );
     port (
         Video_in             : in std_logic_vector(23 downto 0);
+        active_video_out     : IN STD_LOGIC;
         Video_out            : out std_logic_vector(23 downto 0);
         mute_en_not          : in std_logic;
         s_axis_audio_aclk    : in std_logic;
@@ -206,7 +208,6 @@ audio_passthrough_inst : entity work.audio_passthrough
         -- AXIS output
         m00_axis_tvalid   => axis_tx_valid,
         m00_axis_tdata    => axis_tx_data,
-        m00_axis_tstrb    => axis_tx_strb,
         m00_axis_tlast    => axis_tx_last,
         m00_axis_tready   => axis_tx_ready
     );
@@ -244,6 +245,7 @@ video_transform_inst : entity work.video_transform
     )
     port map (
         Video_in             => constant_red_pixel,
+        active_video_out     => active_video_out,
         Video_out            => Video_out,
         mute_en_not          => mute_en_not,
         s_axis_audio_aclk    => clk,
@@ -288,20 +290,24 @@ end process;
 
 
 generate_audio_data : process
-    variable t : real := 0.0;
-    variable sample  : integer;
-    variable tx_data : std_logic_vector(AUDIO_DATA_WIDTH-1 downto 0);
+    variable t         : real := 0.0;
+    variable sample    : integer;
+    variable tx_data   : std_logic_vector(AUDIO_DATA_WIDTH-1 downto 0);
+    variable sine_sample : std_logic_vector(AUDIO_DATA_WIDTH-1 downto 0);
 begin
     wait for 1 us; -- give time for clocks to stabilize
 
     while true loop
         --------------------------------------------------------------------
+        ac_mute_en_i <= '0';
+        active_video_out <= '1';
+        
         -- Generate sine sample at time t
         sample := integer(SINE_AMPL * sin(2.0 * math_pi * SINE_FREQ * t));
-        sine_data <= std_logic_vector(to_signed(sample, AUDIO_DATA_WIDTH));
+        sine_sample := std_logic_vector(to_signed(sample, AUDIO_DATA_WIDTH));
 
         -- Format sample to I2S (invert MSB)
-        tx_data := not(sine_data(AUDIO_DATA_WIDTH-1)) & sine_data(AUDIO_DATA_WIDTH-2 downto 0);
+        tx_data := not(sine_sample(AUDIO_DATA_WIDTH-1)) & sine_sample(AUDIO_DATA_WIDTH-2 downto 0);
 
         --------------------------------------------------------------------
         -- Wait for Right Channel (lrclk = '1')
@@ -332,6 +338,7 @@ begin
         t := t + T_SAMPLE;
     end loop;
 end process;
+
 
 
 

@@ -13,7 +13,8 @@ end double_flip_flop;
 
 architecture Behavioral of double_flip_flop is
 
-signal reg_metastable   : std_logic_vector(24-1 downto 0) := (others => '0');
+signal reg_metastable : std_logic_vector(23 downto 0) := (others => '0');
+signal reg_sync       : std_logic_vector(23 downto 0) := (others => '0');
 
 begin
 
@@ -21,8 +22,10 @@ sync_process: process(clk_i)
 begin
     if rising_edge(clk_i) then
         reg_metastable <= async_data_i;
-        sync_data_o <= reg_metastable;
+        reg_sync       <= reg_metastable;
     end if;
 end process;
+
+sync_data_o <= reg_sync;
 
 end Behavioral;

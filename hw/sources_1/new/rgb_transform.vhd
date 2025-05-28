@@ -11,7 +11,7 @@ entity rgb_transform is
         s_axis_resetn : IN  STD_LOGIC;
         mute_en_not   : IN  STD_LOGIC;
         active_video_out : IN STD_LOGIC;  -- high only when active frame is drawing
-        peak_bin      : IN  STD_LOGIC_VECTOR(8 DOWNTO 0);
+        peak_bin      : IN  STD_LOGIC_VECTOR(7 DOWNTO 0);
         video_in      : IN  STD_LOGIC_VECTOR(C_VIDEO_DATA_WIDTH-1 downto 0);
         video_out     : OUT STD_LOGIC_VECTOR(C_VIDEO_DATA_WIDTH-1 downto 0)
     );
@@ -64,7 +64,7 @@ begin
                         if video_in /= x"000000" then
                             if latch_ready = '0' then
                                 -- First non black pixel of frame
-                                addra       <= peak_bin(7 downto 0);
+                                addra       <= peak_bin;
                                 latch_ready <= '1';
                                 state       <= WAIT1;
                             else

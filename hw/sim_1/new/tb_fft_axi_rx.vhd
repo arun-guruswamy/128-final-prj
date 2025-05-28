@@ -45,18 +45,19 @@ signal test4_peak_last : std_logic_vector(47 downto 0) := std_logic_vector(to_si
 
 -- DUT output signals
 signal s_axis_data_tready : std_logic;
-signal peak_freq_mag      : std_logic_vector(31 downto 0) := (others => '0');
+signal peak_bin      : std_logic_vector(7 downto 0) := (others => '0');
 
 component fft_axi_rx is
     port (
-        s_axis_clk         : in  std_logic;
-        s_axis_resetn      : in  std_logic;
-        s_axis_data_tdata  : in  std_logic_vector(47 downto 0);
-        s_axis_data_tuser  : in  std_logic_vector(15 downto 0);
-        s_axis_data_tvalid : in  std_logic;
-        s_axis_data_tready : out std_logic;
-        s_axis_data_tlast  : in  std_logic;
-        peak_freq_mag      : out std_logic_vector(31 downto 0)
+    s_axis_clk          : IN STD_LOGIC;
+    s_axis_resetn       : IN STD_LOGIC;
+    s_axis_data_tdata   : IN STD_LOGIC_VECTOR(47 DOWNTO 0);
+    s_axis_data_tuser   : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    s_axis_data_tvalid  : IN STD_LOGIC;
+    s_axis_data_tready  : OUT STD_LOGIC;
+    s_axis_data_tlast   : IN STD_LOGIC;
+    
+    peak_bin            : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
     );
 end component;
 
@@ -72,7 +73,7 @@ uut: fft_axi_rx
         s_axis_data_tvalid => s_axis_data_tvalid,
         s_axis_data_tready => s_axis_data_tready,
         s_axis_data_tlast  => s_axis_data_tlast,
-        peak_freq_mag      => peak_freq_mag
+        peak_bin      => peak_bin
     );
 
 -- Clock generation
@@ -131,26 +132,33 @@ begin
     
     
     -- === TEST 2: Peak at front ===
+    -- Setup tvalid early
     s_axis_data_tvalid <= '1';
     s_axis_data_tlast  <= '0';
+    wait until rising_edge(s_axis_clk);
     
+    -- SAMPLE 1
     s_axis_data_tdata <= test1_peak_first;
     s_axis_data_tuser <= std_logic_vector(to_unsigned(0, 16));
     wait until rising_edge(s_axis_clk);
     
+    -- SAMPLE 2
     s_axis_data_tdata <= test2_peak_first;
     s_axis_data_tuser <= std_logic_vector(to_unsigned(1, 16));
     wait until rising_edge(s_axis_clk);
     
+    -- SAMPLE 3
     s_axis_data_tdata <= test3_peak_first;
     s_axis_data_tuser <= std_logic_vector(to_unsigned(2, 16));
     wait until rising_edge(s_axis_clk);
     
+    -- SAMPLE 4 - LAST
     s_axis_data_tdata <= test4_peak_first;
     s_axis_data_tuser <= std_logic_vector(to_unsigned(3, 16));
     s_axis_data_tlast <= '1';
     wait until rising_edge(s_axis_clk);
     
+    -- Deassert control
     s_axis_data_tvalid <= '0';
     s_axis_data_tlast  <= '0';
     wait for 50 ns;
@@ -159,27 +167,34 @@ begin
     -- === TEST 3: Peak at end ===
     s_axis_data_tvalid <= '1';
     s_axis_data_tlast  <= '0';
+    wait until rising_edge(s_axis_clk);
     
+    -- SAMPLE 1
     s_axis_data_tdata <= test1_peak_last;
     s_axis_data_tuser <= std_logic_vector(to_unsigned(0, 16));
     wait until rising_edge(s_axis_clk);
     
+    -- SAMPLE 2
     s_axis_data_tdata <= test2_peak_last;
     s_axis_data_tuser <= std_logic_vector(to_unsigned(1, 16));
     wait until rising_edge(s_axis_clk);
     
+    -- SAMPLE 3
     s_axis_data_tdata <= test3_peak_last;
     s_axis_data_tuser <= std_logic_vector(to_unsigned(2, 16));
     wait until rising_edge(s_axis_clk);
     
+    -- SAMPLE 4 - LAST
     s_axis_data_tdata <= test4_peak_last;
     s_axis_data_tuser <= std_logic_vector(to_unsigned(3, 16));
     s_axis_data_tlast <= '1';
     wait until rising_edge(s_axis_clk);
     
+    -- Deassert control
     s_axis_data_tvalid <= '0';
     s_axis_data_tlast  <= '0';
     wait for 50 ns;
+
     
 
     wait;
