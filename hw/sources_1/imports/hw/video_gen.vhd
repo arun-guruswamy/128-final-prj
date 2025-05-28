@@ -34,7 +34,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity video_gen is
 Port ( 
    pxl_clk  : in  std_logic;
-   vsync_i : in std_logic;
+   hsync_i  : in std_logic;
+   fsync_i : in std_logic;
    active_video_i : in std_logic;
    amplitude : in std_logic_vector(47 downto 0);
    toggle : in std_logic;
@@ -61,23 +62,28 @@ begin
 pixel_counter : process(pxl_clk)
 begin
     if rising_edge(pxl_clk) then
-        if vsync_i = '1' then
+        if fsync_i = '1' then
             x_coord <= 0;
-            y_coord <= 0;
+        elsif hsync_i = '0' then
+                x_coord <= 0;            
         elsif active_video_i = '1' then
-            -- Update X coordinate
-            if x_coord = SCREEN_WIDTH-1 then
-                x_coord <= 0;  
-                -- Update Y coordinate                          
-                if y_coord = SCREEN_HEIGHT-1 then
-                    y_coord <= 0;
-                else 
-                    y_coord <= y_coord + 1;
-                end if;
-            else
                 x_coord <= x_coord + 1;
-            end if;             
-        end if;     
+        end if;
+        
+        if fsync_i = '1' then
+            y_coord <= 0;
+        elsif x_coord = 1 then                      
+                y_coord <= y_coord + 1;
+        end if;  
+           
+        if fsync_i = '1' then
+           if (shape_x_position + 50) = 700 then
+              x_speed <= -1;
+           elsif shape_x_position = 0 then
+              x_speed <= 1;
+           end if;
+           shape_x_position <= shape_x_position + x_speed;    
+        end if;                       
     end if;
 end process pixel_counter;
 
@@ -86,7 +92,7 @@ begin
     if rising_edge(pxl_clk) then
         if active_video_i = '1' then 
             if toggle = '1' then
-                if x_coord > 100 and x_coord < 150 and y_coord > 100 and y_coord < 150 then
+                if x_coord > shape_x_position and x_coord < (shape_x_position + 50) and y_coord > 100 and y_coord < 150 then
                     pxl_int <= x"f63f0f";
                 else 
                     pxl_int <= x"000000";  
