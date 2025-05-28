@@ -69,7 +69,6 @@ architecture sim of tb_rms is
             m00_axis_aresetn : in std_logic;
             m00_axis_tvalid  : out std_logic;
             m00_axis_tdata   : out std_logic_vector(C_AXI_STREAM_DATA_WIDTH - 1 downto 0);
-            m00_axis_tstrb   : out std_logic_vector((C_AXI_STREAM_DATA_WIDTH / 8) - 1 downto 0);
             m00_axis_tlast   : out std_logic;
             m00_axis_tready  : in std_logic
         );
@@ -253,7 +252,6 @@ begin
             m00_axis_aresetn => reset_n,
             m00_axis_tvalid  => M_AXIS_TVALID,
             m00_axis_tdata   => M_AXIS_TDATA,
-            m00_axis_tstrb   => M_AXIS_TSTRB,
             m00_axis_tlast   => M_AXIS_TLAST,
             m00_axis_tready  => M_AXIS_TREADY
         );
@@ -413,24 +411,24 @@ begin
         axi_reg       <= 1;
         axi_data_write <= std_logic_vector(to_unsigned(89, axi_data_write'LENGTH));
         master_write_axi_reg(S_AXI_AWADDR, S_AXI_WDATA, S_AXI_WSTRB, enable_send, axi_reg, axi_data_write, S_AXI_BVALID);
-        wait for 1000000 ns;
+        wait for 1 ms;
 
         -- === Start RMS Amplitude Test Sequence ===
         report "Starting RMS test. Initial 25% amplitude.";
         current_sine_ampl <= SINE_AMPL * 0.25;
-        wait for 100 ms; -- Allow time for RMS to settle
+        wait for 1 ms; -- Allow time for RMS to settle
 
         report "Changing amplitude to 100%.";
         current_sine_ampl <= SINE_AMPL * 1.0;
-        wait for 100 ms;
+        wait for 1 ms;
 
         report "Changing amplitude to 50%.";
         current_sine_ampl <= SINE_AMPL * 0.5;
-        wait for 100 ms;
+        wait for 1 ms;
 
         report "Changing amplitude to 0%.";
         current_sine_ampl <= 0.0;
-        wait for 100 ms;
+        wait for 1 ms;
 
         report "Test sequence finished.";
         std.env.stop; -- Stop the simulation
