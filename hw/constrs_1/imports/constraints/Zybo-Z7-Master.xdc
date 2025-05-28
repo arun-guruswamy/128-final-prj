@@ -10,8 +10,8 @@
 
 
 ##Switches
-set_property -dict {PACKAGE_PIN G15 IOSTANDARD LVCMOS33} [get_ports toggle]
-set_property -dict {PACKAGE_PIN P15 IOSTANDARD LVCMOS33} [get_ports dds_reset_i_0]
+#set_property -dict {PACKAGE_PIN G15 IOSTANDARD LVCMOS33} [get_ports toggle]
+#set_property -dict {PACKAGE_PIN P15 IOSTANDARD LVCMOS33} [get_ports dds_reset_i_0]
 set_property -dict {PACKAGE_PIN W13 IOSTANDARD LVCMOS33} [get_ports ac_mute_en_i_0]
 set_property -dict {PACKAGE_PIN T16 IOSTANDARD LVCMOS33} [get_ports mux_select_0]
 
@@ -200,8 +200,8 @@ set_property -dict { PACKAGE_PIN G18   IOSTANDARD LVCMOS33 } [get_ports { hdmi_o
 #set_property PACKAGE_PIN W9 [get_ports {netic19_w9}]; #IO_L16N_T2_13
 #set_property PACKAGE_PIN Y9 [get_ports {netic19_y9}]; #IO_L14P_T2_SRCC_13
 
-#set_false_path -from [get_cells -hierarchical -filter {NAME =~ "*left_input_to_axi_transmitter_reg[*]"}] -to [get_cells -hierarchical -filter {NAME =~ "*reg_metastable_reg[*]"}]
-#set_false_path -from [get_cells -hierarchical -filter {NAME =~ "*right_input_to_axi_transmitter_reg[*]"}] -to [get_cells -hierarchical -filter {NAME =~ "*reg_metastable_reg[*]"}]
+set_false_path -from [get_cells -hierarchical -filter {NAME =~ "*left_input_to_axi_transmitter_reg[*]"}] -to [get_cells -hierarchical -filter {NAME =~ "*reg_metastable_reg[*]"}]
+set_false_path -from [get_cells -hierarchical -filter {NAME =~ "*right_input_to_axi_transmitter_reg[*]"}] -to [get_cells -hierarchical -filter {NAME =~ "*reg_metastable_reg[*]"}]
 
-#set_false_path -from [get_cells -hierarchical -filter {NAME =~ *fifo_2_reg*}] -to [get_cells -hierarchical -filter {NAME =~ *peak_bin_int_reg* || NAME =~ *peak_bin_var_reg* || NAME =~ *max_mag_var_reg*}]
+set_false_path -from [get_cells -hierarchical -filter {NAME =~ *fifo_2_reg*}] -to [get_cells -hierarchical -filter {NAME =~ *peak_bin_int_reg* || NAME =~ *peak_bin_var_reg* || NAME =~ *max_mag_var_reg*}]
 

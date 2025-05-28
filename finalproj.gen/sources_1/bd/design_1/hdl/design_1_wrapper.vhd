@@ -1,7 +1,7 @@
 --Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2021.2 (win64) Build 3367213 Tue Oct 19 02:48:09 MDT 2021
---Date        : Tue May 27 17:05:41 2025
+--Date        : Tue May 27 18:05:39 2025
 --Host        : m210-02 running 64-bit major release  (build 9200)
 --Command     : generate_target design_1_wrapper.bd
 --Design      : design_1_wrapper
@@ -34,6 +34,14 @@ entity design_1_wrapper is
     FIXED_IO_ps_clk : inout STD_LOGIC;
     FIXED_IO_ps_porb : inout STD_LOGIC;
     FIXED_IO_ps_srstb : inout STD_LOGIC;
+    TMDS_0_clk_n : out STD_LOGIC;
+    TMDS_0_clk_p : out STD_LOGIC;
+    TMDS_0_data_n : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    TMDS_0_data_p : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    TMDS_1_clk_n : out STD_LOGIC;
+    TMDS_1_clk_p : out STD_LOGIC;
+    TMDS_1_data_n : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    TMDS_1_data_p : out STD_LOGIC_VECTOR ( 2 downto 0 );
     ac_adc_data_i_0 : in STD_LOGIC;
     ac_adc_lrclk_o_0 : out STD_LOGIC;
     ac_bclk_o_0 : out STD_LOGIC;
@@ -42,10 +50,6 @@ entity design_1_wrapper is
     ac_mclk_o_0 : out STD_LOGIC;
     ac_mute_en_i_0 : in STD_LOGIC;
     ac_mute_n_o_0 : out STD_LOGIC;
-    hdmi_out_clk_n : out STD_LOGIC;
-    hdmi_out_clk_p : out STD_LOGIC;
-    hdmi_out_data_n : out STD_LOGIC_VECTOR ( 2 downto 0 );
-    hdmi_out_data_p : out STD_LOGIC_VECTOR ( 2 downto 0 );
     hdmi_out_ddc_scl_io : inout STD_LOGIC;
     hdmi_out_ddc_sda_io : inout STD_LOGIC;
     iic_scl_io : inout STD_LOGIC;
@@ -99,10 +103,14 @@ architecture STRUCTURE of design_1_wrapper is
     hdmi_out_ddc_scl_i : in STD_LOGIC;
     hdmi_out_ddc_scl_o : out STD_LOGIC;
     hdmi_out_ddc_scl_t : out STD_LOGIC;
-    hdmi_out_clk_p : out STD_LOGIC;
-    hdmi_out_clk_n : out STD_LOGIC;
-    hdmi_out_data_p : out STD_LOGIC_VECTOR ( 2 downto 0 );
-    hdmi_out_data_n : out STD_LOGIC_VECTOR ( 2 downto 0 )
+    TMDS_0_clk_p : out STD_LOGIC;
+    TMDS_0_clk_n : out STD_LOGIC;
+    TMDS_0_data_p : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    TMDS_0_data_n : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    TMDS_1_clk_p : out STD_LOGIC;
+    TMDS_1_clk_n : out STD_LOGIC;
+    TMDS_1_data_p : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    TMDS_1_data_n : out STD_LOGIC_VECTOR ( 2 downto 0 )
   );
   end component design_1;
   component IOBUF is
@@ -149,6 +157,14 @@ design_1_i: component design_1
       FIXED_IO_ps_clk => FIXED_IO_ps_clk,
       FIXED_IO_ps_porb => FIXED_IO_ps_porb,
       FIXED_IO_ps_srstb => FIXED_IO_ps_srstb,
+      TMDS_0_clk_n => TMDS_0_clk_n,
+      TMDS_0_clk_p => TMDS_0_clk_p,
+      TMDS_0_data_n(2 downto 0) => TMDS_0_data_n(2 downto 0),
+      TMDS_0_data_p(2 downto 0) => TMDS_0_data_p(2 downto 0),
+      TMDS_1_clk_n => TMDS_1_clk_n,
+      TMDS_1_clk_p => TMDS_1_clk_p,
+      TMDS_1_data_n(2 downto 0) => TMDS_1_data_n(2 downto 0),
+      TMDS_1_data_p(2 downto 0) => TMDS_1_data_p(2 downto 0),
       ac_adc_data_i_0 => ac_adc_data_i_0,
       ac_adc_lrclk_o_0 => ac_adc_lrclk_o_0,
       ac_bclk_o_0 => ac_bclk_o_0,
@@ -157,10 +173,6 @@ design_1_i: component design_1
       ac_mclk_o_0 => ac_mclk_o_0,
       ac_mute_en_i_0 => ac_mute_en_i_0,
       ac_mute_n_o_0 => ac_mute_n_o_0,
-      hdmi_out_clk_n => hdmi_out_clk_n,
-      hdmi_out_clk_p => hdmi_out_clk_p,
-      hdmi_out_data_n(2 downto 0) => hdmi_out_data_n(2 downto 0),
-      hdmi_out_data_p(2 downto 0) => hdmi_out_data_p(2 downto 0),
       hdmi_out_ddc_scl_i => hdmi_out_ddc_scl_i,
       hdmi_out_ddc_scl_o => hdmi_out_ddc_scl_o,
       hdmi_out_ddc_scl_t => hdmi_out_ddc_scl_t,

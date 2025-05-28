@@ -65,6 +65,7 @@ ENTITY design_1_audio_passthrough_0_0 IS
     ac_dac_lrclk_o : OUT STD_LOGIC;
     ac_adc_data_i : IN STD_LOGIC;
     ac_adc_lrclk_o : OUT STD_LOGIC;
+    amplitude_o : OUT STD_LOGIC_VECTOR(47 DOWNTO 0);
     dds_enable_i : IN STD_LOGIC;
     dds_reset_i : IN STD_LOGIC;
     s00_axi_aclk : IN STD_LOGIC;
@@ -118,6 +119,7 @@ ARCHITECTURE design_1_audio_passthrough_0_0_arch OF design_1_audio_passthrough_0
       ac_dac_lrclk_o : OUT STD_LOGIC;
       ac_adc_data_i : IN STD_LOGIC;
       ac_adc_lrclk_o : OUT STD_LOGIC;
+      amplitude_o : OUT STD_LOGIC_VECTOR(47 DOWNTO 0);
       dds_enable_i : IN STD_LOGIC;
       dds_reset_i : IN STD_LOGIC;
       s00_axi_aclk : IN STD_LOGIC;
@@ -207,6 +209,7 @@ BEGIN
       ac_dac_lrclk_o => ac_dac_lrclk_o,
       ac_adc_data_i => ac_adc_data_i,
       ac_adc_lrclk_o => ac_adc_lrclk_o,
+      amplitude_o => amplitude_o,
       dds_enable_i => dds_enable_i,
       dds_reset_i => dds_reset_i,
       s00_axi_aclk => s00_axi_aclk,

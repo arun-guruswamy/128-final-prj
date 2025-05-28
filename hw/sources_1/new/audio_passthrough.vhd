@@ -66,7 +66,6 @@ entity audio_passthrough is
 		m00_axis_aresetn  : in std_logic;
 		m00_axis_tvalid   : out std_logic;
 		m00_axis_tdata    : out std_logic_vector(C_AXI_STREAM_DATA_WIDTH-1 downto 0);
-		m00_axis_tstrb    : out std_logic_vector((C_AXI_STREAM_DATA_WIDTH/8)-1 downto 0);
 		m00_axis_tlast    : out std_logic;
 		m00_axis_tready   : in std_logic);
 end audio_passthrough;
@@ -168,7 +167,6 @@ component axi_transmitter is
 		
 		m00_axis_tvalid   : out std_logic;
 		m00_axis_tdata    : out std_logic_vector(DATA_WIDTH-1 downto 0);
-		m00_axis_tstrb    : out std_logic_vector((DATA_WIDTH/8)-1 downto 0);
 		m00_axis_tlast    : out std_logic
 		);		
 end component axi_transmitter;
@@ -299,7 +297,6 @@ axi_tx : axi_transmitter
 		
 		m00_axis_tvalid   => m00_axis_tvalid,
 		m00_axis_tdata    => axi_audio_output,
-		m00_axis_tstrb    => m00_axis_tstrb,
 		m00_axis_tlast    => m00_axis_tlast);			
 
 ---------------------------------------------------------------------------- 

@@ -1,7 +1,7 @@
 --Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2021.2 (win64) Build 3367213 Tue Oct 19 02:48:09 MDT 2021
---Date        : Tue May 27 17:05:40 2025
+--Date        : Tue May 27 18:05:38 2025
 --Host        : m210-02 running 64-bit major release  (build 9200)
 --Command     : generate_target design_1.bd
 --Design      : design_1
@@ -1625,6 +1625,14 @@ entity design_1 is
     FIXED_IO_ps_clk : inout STD_LOGIC;
     FIXED_IO_ps_porb : inout STD_LOGIC;
     FIXED_IO_ps_srstb : inout STD_LOGIC;
+    TMDS_0_clk_n : out STD_LOGIC;
+    TMDS_0_clk_p : out STD_LOGIC;
+    TMDS_0_data_n : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    TMDS_0_data_p : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    TMDS_1_clk_n : out STD_LOGIC;
+    TMDS_1_clk_p : out STD_LOGIC;
+    TMDS_1_data_n : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    TMDS_1_data_p : out STD_LOGIC_VECTOR ( 2 downto 0 );
     ac_adc_data_i_0 : in STD_LOGIC;
     ac_adc_lrclk_o_0 : out STD_LOGIC;
     ac_bclk_o_0 : out STD_LOGIC;
@@ -1633,10 +1641,6 @@ entity design_1 is
     ac_mclk_o_0 : out STD_LOGIC;
     ac_mute_en_i_0 : in STD_LOGIC;
     ac_mute_n_o_0 : out STD_LOGIC;
-    hdmi_out_clk_n : out STD_LOGIC;
-    hdmi_out_clk_p : out STD_LOGIC;
-    hdmi_out_data_n : out STD_LOGIC_VECTOR ( 2 downto 0 );
-    hdmi_out_data_p : out STD_LOGIC_VECTOR ( 2 downto 0 );
     hdmi_out_ddc_scl_i : in STD_LOGIC;
     hdmi_out_ddc_scl_o : out STD_LOGIC;
     hdmi_out_ddc_scl_t : out STD_LOGIC;
@@ -1652,7 +1656,7 @@ entity design_1 is
     mux_select_0 : in STD_LOGIC
   );
   attribute CORE_GENERATION_INFO : string;
-  attribute CORE_GENERATION_INFO of design_1 : entity is "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VHDL,numBlks=23,numReposBlks=17,numNonXlnxBlks=2,numHierBlks=6,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=3,numPkgbdBlks=0,bdsource=USER,da_axi4_cnt=4,da_board_cnt=1,synth_mode=OOC_per_IP}";
+  attribute CORE_GENERATION_INFO of design_1 : entity is "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VHDL,numBlks=24,numReposBlks=18,numNonXlnxBlks=3,numHierBlks=6,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=3,numPkgbdBlks=0,bdsource=USER,da_axi4_cnt=4,da_board_cnt=1,da_clkrst_cnt=2,synth_mode=OOC_per_IP}";
   attribute HW_HANDOFF : string;
   attribute HW_HANDOFF of design_1 : entity is "design_1.hwdef";
 end design_1;
@@ -1837,21 +1841,6 @@ architecture STRUCTURE of design_1 is
     PS_PORB : inout STD_LOGIC
   );
   end component design_1_processing_system7_0_0;
-  component design_1_rgb2dvi_1_0 is
-  port (
-    TMDS_Clk_p : out STD_LOGIC;
-    TMDS_Clk_n : out STD_LOGIC;
-    TMDS_Data_p : out STD_LOGIC_VECTOR ( 2 downto 0 );
-    TMDS_Data_n : out STD_LOGIC_VECTOR ( 2 downto 0 );
-    aRst_n : in STD_LOGIC;
-    vid_pData : in STD_LOGIC_VECTOR ( 23 downto 0 );
-    vid_pVDE : in STD_LOGIC;
-    vid_pHSync : in STD_LOGIC;
-    vid_pVSync : in STD_LOGIC;
-    PixelClk : in STD_LOGIC;
-    SerialClk : in STD_LOGIC
-  );
-  end component design_1_rgb2dvi_1_0;
   component design_1_v_tc_out_0 is
   port (
     clk : in STD_LOGIC;
@@ -1948,6 +1937,36 @@ architecture STRUCTURE of design_1 is
     dout : out STD_LOGIC_VECTOR ( 1 downto 0 )
   );
   end component design_1_xlconcat_0_0;
+  component design_1_axis_fifo_0_0 is
+  port (
+    s00_axis_aclk : in STD_LOGIC;
+    s00_axis_aresetn : in STD_LOGIC;
+    s00_axis_tready : out STD_LOGIC;
+    s00_axis_tdata : in STD_LOGIC_VECTOR ( 31 downto 0 );
+    s00_axis_tlast : in STD_LOGIC;
+    s00_axis_tvalid : in STD_LOGIC;
+    m00_axis_aclk : in STD_LOGIC;
+    m00_axis_aresetn : in STD_LOGIC;
+    m00_axis_tvalid : out STD_LOGIC;
+    m00_axis_tdata : out STD_LOGIC_VECTOR ( 31 downto 0 );
+    m00_axis_tlast : out STD_LOGIC;
+    m00_axis_tready : in STD_LOGIC
+  );
+  end component design_1_axis_fifo_0_0;
+  component design_1_video_transform_0_0 is
+  port (
+    Video_in : in STD_LOGIC_VECTOR ( 23 downto 0 );
+    Video_out : out STD_LOGIC_VECTOR ( 23 downto 0 );
+    s_axis_audio_aclk : in STD_LOGIC;
+    s_axis_audio_aresetn : in STD_LOGIC;
+    s_axis_audio_tdata : in STD_LOGIC_VECTOR ( 31 downto 0 );
+    s_axis_audio_tvalid : in STD_LOGIC;
+    s_axis_audio_tlast : in STD_LOGIC;
+    s_axis_audio_tready : out STD_LOGIC;
+    mute_en_not : in STD_LOGIC;
+    m_axis_amp_tdata : out STD_LOGIC_VECTOR ( 31 downto 0 )
+  );
+  end component design_1_video_transform_0_0;
   component design_1_audio_passthrough_0_0 is
   port (
     mclk_i : in STD_LOGIC;
@@ -1960,6 +1979,7 @@ architecture STRUCTURE of design_1 is
     ac_dac_lrclk_o : out STD_LOGIC;
     ac_adc_data_i : in STD_LOGIC;
     ac_adc_lrclk_o : out STD_LOGIC;
+    amplitude_o : out STD_LOGIC_VECTOR ( 47 downto 0 );
     dds_enable_i : in STD_LOGIC;
     dds_reset_i : in STD_LOGIC;
     s00_axi_aclk : in STD_LOGIC;
@@ -1992,36 +2012,36 @@ architecture STRUCTURE of design_1 is
     m00_axis_tready : in STD_LOGIC
   );
   end component design_1_audio_passthrough_0_0;
-  component design_1_axis_fifo_0_0 is
+  component design_1_rgb2dvi_2_0 is
   port (
-    s00_axis_aclk : in STD_LOGIC;
-    s00_axis_aresetn : in STD_LOGIC;
-    s00_axis_tready : out STD_LOGIC;
-    s00_axis_tdata : in STD_LOGIC_VECTOR ( 31 downto 0 );
-    s00_axis_tlast : in STD_LOGIC;
-    s00_axis_tvalid : in STD_LOGIC;
-    m00_axis_aclk : in STD_LOGIC;
-    m00_axis_aresetn : in STD_LOGIC;
-    m00_axis_tvalid : out STD_LOGIC;
-    m00_axis_tdata : out STD_LOGIC_VECTOR ( 31 downto 0 );
-    m00_axis_tlast : out STD_LOGIC;
-    m00_axis_tready : in STD_LOGIC
+    TMDS_Clk_p : out STD_LOGIC;
+    TMDS_Clk_n : out STD_LOGIC;
+    TMDS_Data_p : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    TMDS_Data_n : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    aRst_n : in STD_LOGIC;
+    vid_pData : in STD_LOGIC_VECTOR ( 23 downto 0 );
+    vid_pVDE : in STD_LOGIC;
+    vid_pHSync : in STD_LOGIC;
+    vid_pVSync : in STD_LOGIC;
+    PixelClk : in STD_LOGIC;
+    SerialClk : in STD_LOGIC
   );
-  end component design_1_axis_fifo_0_0;
-  component design_1_video_transform_0_0 is
+  end component design_1_rgb2dvi_2_0;
+  component design_1_rgb2dvi_0_0 is
   port (
-    Video_in : in STD_LOGIC_VECTOR ( 23 downto 0 );
-    Video_out : out STD_LOGIC_VECTOR ( 23 downto 0 );
-    s_axis_audio_aclk : in STD_LOGIC;
-    s_axis_audio_aresetn : in STD_LOGIC;
-    s_axis_audio_tdata : in STD_LOGIC_VECTOR ( 31 downto 0 );
-    s_axis_audio_tvalid : in STD_LOGIC;
-    s_axis_audio_tlast : in STD_LOGIC;
-    s_axis_audio_tready : out STD_LOGIC;
-    mute_en_not : in STD_LOGIC;
-    m_axis_amp_tdata : out STD_LOGIC_VECTOR ( 31 downto 0 )
+    TMDS_Clk_p : out STD_LOGIC;
+    TMDS_Clk_n : out STD_LOGIC;
+    TMDS_Data_p : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    TMDS_Data_n : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    aRst_n : in STD_LOGIC;
+    vid_pData : in STD_LOGIC_VECTOR ( 23 downto 0 );
+    vid_pVDE : in STD_LOGIC;
+    vid_pHSync : in STD_LOGIC;
+    vid_pVSync : in STD_LOGIC;
+    PixelClk : in STD_LOGIC;
+    SerialClk : in STD_LOGIC
   );
-  end component design_1_video_transform_0_0;
+  end component design_1_rgb2dvi_0_0;
   signal ACLK_1 : STD_LOGIC;
   signal ACLK_2 : STD_LOGIC;
   signal Net : STD_LOGIC;
@@ -2195,16 +2215,21 @@ architecture STRUCTURE of design_1 is
   signal ps7_0_axi_periph_M03_AXI_WREADY : STD_LOGIC;
   signal ps7_0_axi_periph_M03_AXI_WSTRB : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal ps7_0_axi_periph_M03_AXI_WVALID : STD_LOGIC;
-  signal rgb2dvi_1_TMDS_CLK_N : STD_LOGIC;
-  signal rgb2dvi_1_TMDS_CLK_P : STD_LOGIC;
-  signal rgb2dvi_1_TMDS_DATA_N : STD_LOGIC_VECTOR ( 2 downto 0 );
-  signal rgb2dvi_1_TMDS_DATA_P : STD_LOGIC_VECTOR ( 2 downto 0 );
+  signal rgb2dvi_0_TMDS_CLK_N : STD_LOGIC;
+  signal rgb2dvi_0_TMDS_CLK_P : STD_LOGIC;
+  signal rgb2dvi_0_TMDS_DATA_N : STD_LOGIC_VECTOR ( 2 downto 0 );
+  signal rgb2dvi_0_TMDS_DATA_P : STD_LOGIC_VECTOR ( 2 downto 0 );
+  signal rgb2dvi_2_TMDS_CLK_N : STD_LOGIC;
+  signal rgb2dvi_2_TMDS_CLK_P : STD_LOGIC;
+  signal rgb2dvi_2_TMDS_DATA_N : STD_LOGIC_VECTOR ( 2 downto 0 );
+  signal rgb2dvi_2_TMDS_DATA_P : STD_LOGIC_VECTOR ( 2 downto 0 );
   signal v_tc_out_active_video_out : STD_LOGIC;
   signal v_tc_out_hsync_out : STD_LOGIC;
   signal v_tc_out_irq : STD_LOGIC;
   signal v_tc_out_vsync_out : STD_LOGIC;
   signal video_transform_0_Video_out : STD_LOGIC_VECTOR ( 23 downto 0 );
   signal xlconcat_0_dout : STD_LOGIC_VECTOR ( 1 downto 0 );
+  signal NLW_audio_passthrough_0_amplitude_o_UNCONNECTED : STD_LOGIC_VECTOR ( 47 downto 0 );
   signal NLW_audio_passthrough_0_m00_axis_tstrb_UNCONNECTED : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal NLW_axi_iic_0_gpo_UNCONNECTED : STD_LOGIC_VECTOR ( 0 to 0 );
   signal NLW_proc_sys_reset_0_mb_reset_UNCONNECTED : STD_LOGIC;
@@ -2253,8 +2278,10 @@ architecture STRUCTURE of design_1 is
   attribute X_INTERFACE_INFO of FIXED_IO_ps_clk : signal is "xilinx.com:display_processing_system7:fixedio:1.0 FIXED_IO PS_CLK";
   attribute X_INTERFACE_INFO of FIXED_IO_ps_porb : signal is "xilinx.com:display_processing_system7:fixedio:1.0 FIXED_IO PS_PORB";
   attribute X_INTERFACE_INFO of FIXED_IO_ps_srstb : signal is "xilinx.com:display_processing_system7:fixedio:1.0 FIXED_IO PS_SRSTB";
-  attribute X_INTERFACE_INFO of hdmi_out_clk_n : signal is "digilentinc.com:interface:tmds:1.0 hdmi_out CLK_N";
-  attribute X_INTERFACE_INFO of hdmi_out_clk_p : signal is "digilentinc.com:interface:tmds:1.0 hdmi_out CLK_P";
+  attribute X_INTERFACE_INFO of TMDS_0_clk_n : signal is "digilentinc.com:interface:tmds:1.0 TMDS_0 CLK_N";
+  attribute X_INTERFACE_INFO of TMDS_0_clk_p : signal is "digilentinc.com:interface:tmds:1.0 TMDS_0 CLK_P";
+  attribute X_INTERFACE_INFO of TMDS_1_clk_n : signal is "digilentinc.com:interface:tmds:1.0 TMDS_1 CLK_N";
+  attribute X_INTERFACE_INFO of TMDS_1_clk_p : signal is "digilentinc.com:interface:tmds:1.0 TMDS_1 CLK_P";
   attribute X_INTERFACE_INFO of hdmi_out_ddc_scl_i : signal is "xilinx.com:interface:iic:1.0 hdmi_out_ddc SCL_I";
   attribute X_INTERFACE_INFO of hdmi_out_ddc_scl_o : signal is "xilinx.com:interface:iic:1.0 hdmi_out_ddc SCL_O";
   attribute X_INTERFACE_INFO of hdmi_out_ddc_scl_t : signal is "xilinx.com:interface:iic:1.0 hdmi_out_ddc SCL_T";
@@ -2275,9 +2302,19 @@ architecture STRUCTURE of design_1 is
   attribute X_INTERFACE_INFO of DDR_dqs_n : signal is "xilinx.com:interface:ddrx:1.0 DDR DQS_N";
   attribute X_INTERFACE_INFO of DDR_dqs_p : signal is "xilinx.com:interface:ddrx:1.0 DDR DQS_P";
   attribute X_INTERFACE_INFO of FIXED_IO_mio : signal is "xilinx.com:display_processing_system7:fixedio:1.0 FIXED_IO MIO";
-  attribute X_INTERFACE_INFO of hdmi_out_data_n : signal is "digilentinc.com:interface:tmds:1.0 hdmi_out DATA_N";
-  attribute X_INTERFACE_INFO of hdmi_out_data_p : signal is "digilentinc.com:interface:tmds:1.0 hdmi_out DATA_P";
+  attribute X_INTERFACE_INFO of TMDS_0_data_n : signal is "digilentinc.com:interface:tmds:1.0 TMDS_0 DATA_N";
+  attribute X_INTERFACE_INFO of TMDS_0_data_p : signal is "digilentinc.com:interface:tmds:1.0 TMDS_0 DATA_P";
+  attribute X_INTERFACE_INFO of TMDS_1_data_n : signal is "digilentinc.com:interface:tmds:1.0 TMDS_1 DATA_N";
+  attribute X_INTERFACE_INFO of TMDS_1_data_p : signal is "digilentinc.com:interface:tmds:1.0 TMDS_1 DATA_P";
 begin
+  TMDS_0_clk_n <= rgb2dvi_2_TMDS_CLK_N;
+  TMDS_0_clk_p <= rgb2dvi_2_TMDS_CLK_P;
+  TMDS_0_data_n(2 downto 0) <= rgb2dvi_2_TMDS_DATA_N(2 downto 0);
+  TMDS_0_data_p(2 downto 0) <= rgb2dvi_2_TMDS_DATA_P(2 downto 0);
+  TMDS_1_clk_n <= rgb2dvi_0_TMDS_CLK_N;
+  TMDS_1_clk_p <= rgb2dvi_0_TMDS_CLK_P;
+  TMDS_1_data_n(2 downto 0) <= rgb2dvi_0_TMDS_DATA_N(2 downto 0);
+  TMDS_1_data_p(2 downto 0) <= rgb2dvi_0_TMDS_DATA_P(2 downto 0);
   ac_adc_data_i_0_1 <= ac_adc_data_i_0;
   ac_adc_lrclk_o_0 <= audio_passthrough_0_ac_adc_lrclk_o;
   ac_bclk_o_0 <= audio_passthrough_0_ac_bclk_o;
@@ -2288,10 +2325,6 @@ begin
   ac_mute_n_o_0 <= audio_passthrough_0_ac_mute_n_o;
   axi_iic_0_IIC_SCL_I <= iic_scl_i;
   axi_iic_0_IIC_SDA_I <= iic_sda_i;
-  hdmi_out_clk_n <= rgb2dvi_1_TMDS_CLK_N;
-  hdmi_out_clk_p <= rgb2dvi_1_TMDS_CLK_P;
-  hdmi_out_data_n(2 downto 0) <= rgb2dvi_1_TMDS_DATA_N(2 downto 0);
-  hdmi_out_data_p(2 downto 0) <= rgb2dvi_1_TMDS_DATA_P(2 downto 0);
   hdmi_out_ddc_scl_o <= processing_system7_0_IIC_0_SCL_O;
   hdmi_out_ddc_scl_t <= processing_system7_0_IIC_0_SCL_T;
   hdmi_out_ddc_sda_o <= processing_system7_0_IIC_0_SDA_O;
@@ -2313,6 +2346,7 @@ audio_passthrough_0: component design_1_audio_passthrough_0_0
       ac_mclk_o => audio_passthrough_0_ac_mclk_o,
       ac_mute_en_i => ac_mute_en_i_0_1,
       ac_mute_n_o => audio_passthrough_0_ac_mute_n_o,
+      amplitude_o(47 downto 0) => NLW_audio_passthrough_0_amplitude_o_UNCONNECTED(47 downto 0),
       dds_enable_i => constant_dds_dout(0),
       dds_reset_i => constant_dds_reset_dout(0),
       m00_axis_aclk => ACLK_2,
@@ -2708,14 +2742,28 @@ ps7_0_axi_periph: entity work.design_1_ps7_0_axi_periph_0
       S00_AXI_wstrb(3 downto 0) => processing_system7_0_M_AXI_GP0_WSTRB(3 downto 0),
       S00_AXI_wvalid => processing_system7_0_M_AXI_GP0_WVALID
     );
-rgb2dvi_1: component design_1_rgb2dvi_1_0
+rgb2dvi_1: component design_1_rgb2dvi_0_0
      port map (
       PixelClk => axi_dynclk_0_PXL_CLK_O,
       SerialClk => axi_dynclk_0_PXL_CLK_5X_O,
-      TMDS_Clk_n => rgb2dvi_1_TMDS_CLK_N,
-      TMDS_Clk_p => rgb2dvi_1_TMDS_CLK_P,
-      TMDS_Data_n(2 downto 0) => rgb2dvi_1_TMDS_DATA_N(2 downto 0),
-      TMDS_Data_p(2 downto 0) => rgb2dvi_1_TMDS_DATA_P(2 downto 0),
+      TMDS_Clk_n => rgb2dvi_0_TMDS_CLK_N,
+      TMDS_Clk_p => rgb2dvi_0_TMDS_CLK_P,
+      TMDS_Data_n(2 downto 0) => rgb2dvi_0_TMDS_DATA_N(2 downto 0),
+      TMDS_Data_p(2 downto 0) => rgb2dvi_0_TMDS_DATA_P(2 downto 0),
+      aRst_n => axi_dynclk_0_LOCKED_O,
+      vid_pData(23 downto 0) => video_transform_0_Video_out(23 downto 0),
+      vid_pHSync => v_tc_out_hsync_out,
+      vid_pVDE => v_tc_out_active_video_out,
+      vid_pVSync => v_tc_out_vsync_out
+    );
+rgb2dvi_2: component design_1_rgb2dvi_2_0
+     port map (
+      PixelClk => axi_dynclk_0_PXL_CLK_O,
+      SerialClk => axi_dynclk_0_PXL_CLK_5X_O,
+      TMDS_Clk_n => rgb2dvi_2_TMDS_CLK_N,
+      TMDS_Clk_p => rgb2dvi_2_TMDS_CLK_P,
+      TMDS_Data_n(2 downto 0) => rgb2dvi_2_TMDS_DATA_N(2 downto 0),
+      TMDS_Data_p(2 downto 0) => rgb2dvi_2_TMDS_DATA_P(2 downto 0),
       aRst_n => axi_dynclk_0_LOCKED_O,
       vid_pData(23 downto 0) => video_transform_0_Video_out(23 downto 0),
       vid_pHSync => v_tc_out_hsync_out,

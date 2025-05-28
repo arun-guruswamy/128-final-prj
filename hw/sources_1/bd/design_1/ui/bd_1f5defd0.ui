@@ -1,85 +1,89 @@
 {
    "ActiveEmotionalView":"Default View",
-   "Default View_ScaleFactor":"0.98154",
-   "Default View_TopLeft":"-278,-2",
+   "Default View_ScaleFactor":"0.982663",
+   "Default View_TopLeft":"-168,-104",
    "ExpandedHierarchyInLayout":"",
    "guistr":"# # String gsaved with Nlview 7.0r6  2020-01-29 bk=1.5227 VDI=41 GEI=36 GUI=JA:10.0 non-TLS
 #  -string -flagsOSRD
-preplace port DDR -pg 1 -lvl 8 -x 2450 -y 480 -defaultsOSRD
-preplace port FIXED_IO -pg 1 -lvl 8 -x 2450 -y 510 -defaultsOSRD
-preplace port hdmi_out -pg 1 -lvl 8 -x 2450 -y 290 -defaultsOSRD
-preplace port hdmi_out_ddc -pg 1 -lvl 8 -x 2450 -y 540 -defaultsOSRD
-preplace port iic -pg 1 -lvl 8 -x 2450 -y 710 -defaultsOSRD
-preplace port port-id_ac_dac_lrclk_o_0 -pg 1 -lvl 8 -x 2450 -y 1120 -defaultsOSRD
-preplace port port-id_ac_dac_data_o_0 -pg 1 -lvl 8 -x 2450 -y 1090 -defaultsOSRD
-preplace port port-id_ac_mute_n_o_0 -pg 1 -lvl 8 -x 2450 -y 1000 -defaultsOSRD
-preplace port port-id_ac_mclk_o_0 -pg 1 -lvl 8 -x 2450 -y 1060 -defaultsOSRD
-preplace port port-id_ac_bclk_o_0 -pg 1 -lvl 8 -x 2450 -y 1030 -defaultsOSRD
-preplace port port-id_ac_adc_lrclk_o_0 -pg 1 -lvl 8 -x 2450 -y 1150 -defaultsOSRD
-preplace port port-id_ac_adc_data_i_0 -pg 1 -lvl 0 -x -140 -y 1070 -defaultsOSRD
-preplace port port-id_ac_mute_en_i_0 -pg 1 -lvl 0 -x -140 -y 1040 -defaultsOSRD
-preplace port port-id_mux_select_0 -pg 1 -lvl 0 -x -140 -y 1010 -defaultsOSRD
-preplace inst axi_dynclk_0 -pg 1 -lvl 5 -x 1520 -y 90 -defaultsOSRD
-preplace inst proc_sys_reset_0 -pg 1 -lvl 2 -x 290 -y 640 -defaultsOSRD
-preplace inst proc_sys_reset_fclk0 -pg 1 -lvl 2 -x 290 -y 850 -defaultsOSRD
-preplace inst processing_system7_0 -pg 1 -lvl 3 -x 720 -y 570 -defaultsOSRD
-preplace inst rgb2dvi_1 -pg 1 -lvl 7 -x 2230 -y 290 -defaultsOSRD
-preplace inst v_tc_out -pg 1 -lvl 5 -x 1520 -y 330 -defaultsOSRD
-preplace inst constant_red_pixel -pg 1 -lvl 5 -x 1520 -y 880 -defaultsOSRD
-preplace inst ps7_0_axi_periph -pg 1 -lvl 4 -x 1160 -y 720 -defaultsOSRD
-preplace inst constant_dds -pg 1 -lvl 3 -x 720 -y 1110 -defaultsOSRD
-preplace inst constant_dds_reset -pg 1 -lvl 3 -x 720 -y 1210 -defaultsOSRD
-preplace inst clk_wiz_0 -pg 1 -lvl 3 -x 720 -y 960 -defaultsOSRD
-preplace inst axi_iic_0 -pg 1 -lvl 5 -x 1520 -y 730 -defaultsOSRD
-preplace inst xlconcat_0 -pg 1 -lvl 1 -x -10 -y 540 -defaultsOSRD
-preplace inst audio_passthrough_0 -pg 1 -lvl 5 -x 1520 -y 1080 -defaultsOSRD
-preplace inst axis_fifo_0 -pg 1 -lvl 6 -x 1860 -y 890 -defaultsOSRD
-preplace inst video_transform_0 -pg 1 -lvl 7 -x 2230 -y 930 -defaultsOSRD
-preplace netloc ACLK_1 1 2 2 500 700 940
-preplace netloc ACLK_2 1 1 6 100 540 470 730 970 900 1340 810 1680 990 2000J
-preplace netloc Net 1 1 3 110 740 NJ 740 930
-preplace netloc ac_adc_data_i_0_1 1 0 5 -110J 1050 NJ 1050 NJ 1050 NJ 1050 1310J
-preplace netloc ac_mute_en_i_0_1 1 0 5 NJ 1040 NJ 1040 NJ 1040 NJ 1040 NJ
-preplace netloc audio_passthrough_0_ac_adc_lrclk_o 1 5 3 NJ 1140 NJ 1140 2420J
-preplace netloc audio_passthrough_0_ac_bclk_o 1 5 3 NJ 1040 2020J 1030 NJ
-preplace netloc audio_passthrough_0_ac_dac_data_o 1 5 3 1680J 1090 NJ 1090 NJ
-preplace netloc audio_passthrough_0_ac_dac_lrclk_o 1 5 3 NJ 1120 NJ 1120 NJ
-preplace netloc audio_passthrough_0_ac_mclk_o 1 5 3 NJ 1060 NJ 1060 NJ
-preplace netloc audio_passthrough_0_ac_mute_n_o 1 5 3 1690J 1030 2010 830 2420J
-preplace netloc axi_dynclk_0_LOCKED_O 1 5 2 NJ 110 2000
-preplace netloc axi_dynclk_0_PXL_CLK_5X_O 1 5 2 NJ 90 2010
-preplace netloc axi_dynclk_0_PXL_CLK_O 1 4 3 1360 480 1700 340 NJ
-preplace netloc axi_iic_0_iic2intc_irpt 1 0 6 -110 610 80J 520 490J 710 950J 510 NJ 510 1670
-preplace netloc clk_wiz_0_clk_out1 1 3 2 NJ 960 1300J
-preplace netloc constant_dds_dout 1 3 2 940J 1080 NJ
-preplace netloc constant_dds_reset_dout 1 3 2 970J 1100 NJ
-preplace netloc constant_red_pixel_dout 1 5 2 1690J 790 2000J
-preplace netloc mux_select_0_1 1 0 5 NJ 1010 NJ 1010 490J 900 940J 920 1310J
-preplace netloc proc_sys_reset_0_peripheral_aresetn 1 2 2 460 720 980
-preplace netloc proc_sys_reset_fclk0_peripheral_aresetn 1 2 5 N 890 980 910 1350 820 1670 1000 2020J
-preplace netloc v_tc_out_active_video_out 1 5 2 N 300 NJ
-preplace netloc v_tc_out_hsync_out 1 5 2 1690 260 NJ
-preplace netloc v_tc_out_irq 1 0 6 -120 750 NJ 750 NJ 750 960J 530 NJ 530 1690
-preplace netloc v_tc_out_vsync_out 1 5 2 1670 280 NJ
-preplace netloc video_transform_0_Video_out 1 6 2 2020 160 2410
-preplace netloc xlconcat_0_dout 1 1 2 90J 530 480
-preplace netloc audio_passthrough_0_m00_axis 1 5 1 1700 850n
-preplace netloc axi_iic_0_IIC 1 5 3 NJ 710 NJ 710 NJ
-preplace netloc axis_fifo_0_m00_axis 1 6 1 N 890
-preplace netloc processing_system7_0_DDR 1 3 5 NJ 500 NJ 500 NJ 500 NJ 500 2420J
-preplace netloc processing_system7_0_FIXED_IO 1 3 5 NJ 520 NJ 520 1700J 510 NJ 510 NJ
-preplace netloc processing_system7_0_IIC_0 1 3 5 NJ 540 NJ 540 NJ 540 NJ 540 NJ
-preplace netloc processing_system7_0_M_AXI_GP0 1 3 1 980 580n
-preplace netloc ps7_0_axi_periph_M00_AXI 1 4 1 1300 60n
-preplace netloc ps7_0_axi_periph_M01_AXI 1 4 1 1310 240n
-preplace netloc ps7_0_axi_periph_M02_AXI 1 4 1 1330 730n
-preplace netloc ps7_0_axi_periph_M03_AXI 1 4 1 1320 710n
-preplace netloc rgb2dvi_1_TMDS 1 7 1 NJ 290
-levelinfo -pg 1 -140 -10 290 720 1160 1520 1860 2230 2450
-pagesize -pg 1 -db -bbox -sgen -290 0 2610 2030
+preplace port DDR -pg 1 -lvl 8 -x 2430 -y 50 -defaultsOSRD
+preplace port FIXED_IO -pg 1 -lvl 8 -x 2430 -y 80 -defaultsOSRD
+preplace port hdmi_out_ddc -pg 1 -lvl 8 -x 2430 -y 110 -defaultsOSRD
+preplace port iic -pg 1 -lvl 8 -x 2430 -y 660 -defaultsOSRD
+preplace port TMDS_0 -pg 1 -lvl 8 -x 2430 -y 260 -defaultsOSRD
+preplace port TMDS_1 -pg 1 -lvl 8 -x 2430 -y 500 -defaultsOSRD
+preplace port port-id_ac_dac_lrclk_o_0 -pg 1 -lvl 8 -x 2430 -y 950 -defaultsOSRD
+preplace port port-id_ac_dac_data_o_0 -pg 1 -lvl 8 -x 2430 -y 920 -defaultsOSRD
+preplace port port-id_ac_mute_n_o_0 -pg 1 -lvl 8 -x 2430 -y 630 -defaultsOSRD
+preplace port port-id_ac_mclk_o_0 -pg 1 -lvl 8 -x 2430 -y 890 -defaultsOSRD
+preplace port port-id_ac_bclk_o_0 -pg 1 -lvl 8 -x 2430 -y 860 -defaultsOSRD
+preplace port port-id_ac_adc_lrclk_o_0 -pg 1 -lvl 8 -x 2430 -y 980 -defaultsOSRD
+preplace port port-id_ac_adc_data_i_0 -pg 1 -lvl 0 -x 0 -y 910 -defaultsOSRD
+preplace port port-id_ac_mute_en_i_0 -pg 1 -lvl 0 -x 0 -y 880 -defaultsOSRD
+preplace port port-id_mux_select_0 -pg 1 -lvl 0 -x 0 -y 850 -defaultsOSRD
+preplace inst axi_dynclk_0 -pg 1 -lvl 4 -x 1200 -y 500 -defaultsOSRD
+preplace inst proc_sys_reset_0 -pg 1 -lvl 2 -x 430 -y 570 -defaultsOSRD
+preplace inst proc_sys_reset_fclk0 -pg 1 -lvl 2 -x 430 -y 390 -defaultsOSRD
+preplace inst processing_system7_0 -pg 1 -lvl 2 -x 430 -y 130 -defaultsOSRD
+preplace inst v_tc_out -pg 1 -lvl 4 -x 1200 -y 250 -defaultsOSRD
+preplace inst constant_red_pixel -pg 1 -lvl 5 -x 1570 -y 580 -defaultsOSRD
+preplace inst ps7_0_axi_periph -pg 1 -lvl 3 -x 830 -y 500 -defaultsOSRD
+preplace inst constant_dds -pg 1 -lvl 3 -x 830 -y 950 -defaultsOSRD
+preplace inst constant_dds_reset -pg 1 -lvl 3 -x 830 -y 1050 -defaultsOSRD
+preplace inst clk_wiz_0 -pg 1 -lvl 3 -x 830 -y 720 -defaultsOSRD
+preplace inst axi_iic_0 -pg 1 -lvl 4 -x 1200 -y 680 -defaultsOSRD
+preplace inst xlconcat_0 -pg 1 -lvl 1 -x 110 -y 360 -defaultsOSRD
+preplace inst axis_fifo_0 -pg 1 -lvl 5 -x 1570 -y 440 -defaultsOSRD
+preplace inst video_transform_0 -pg 1 -lvl 6 -x 1910 -y 530 -defaultsOSRD
+preplace inst audio_passthrough_0 -pg 1 -lvl 4 -x 1200 -y 920 -defaultsOSRD
+preplace inst rgb2dvi_2 -pg 1 -lvl 7 -x 2280 -y 260 -defaultsOSRD
+preplace inst rgb2dvi_1 -pg 1 -lvl 7 -x 2280 -y 500 -defaultsOSRD
+preplace netloc ACLK_1 1 1 2 220 260 650
+preplace netloc ACLK_2 1 1 5 210 280 660 220 1020 400 1400 320 1730J
+preplace netloc Net 1 1 2 220 290 640
+preplace netloc ac_adc_data_i_0_1 1 0 4 20J 870 NJ 870 NJ 870 970J
+preplace netloc ac_mute_en_i_0_1 1 0 4 NJ 880 NJ 880 NJ 880 NJ
+preplace netloc audio_passthrough_0_ac_adc_lrclk_o 1 4 4 NJ 970 NJ 970 NJ 970 2410J
+preplace netloc audio_passthrough_0_ac_bclk_o 1 4 4 1430J 860 NJ 860 NJ 860 NJ
+preplace netloc audio_passthrough_0_ac_dac_data_o 1 4 4 1390J 920 NJ 920 NJ 920 NJ
+preplace netloc audio_passthrough_0_ac_dac_lrclk_o 1 4 4 NJ 950 NJ 950 NJ 950 NJ
+preplace netloc audio_passthrough_0_ac_mclk_o 1 4 4 NJ 890 NJ 890 NJ 890 NJ
+preplace netloc audio_passthrough_0_ac_mute_n_o 1 4 4 1420J 650 1730 630 NJ 630 NJ
+preplace netloc axi_dynclk_0_LOCKED_O 1 4 3 1380 300 NJ 300 2130
+preplace netloc axi_dynclk_0_PXL_CLK_5X_O 1 4 3 1390 330 NJ 330 2090
+preplace netloc axi_dynclk_0_PXL_CLK_O 1 3 4 1020 90 1370 310 NJ 310 2120
+preplace netloc axi_iic_0_iic2intc_irpt 1 0 5 20 780 NJ 780 NJ 780 1000J 760 1360
+preplace netloc clk_wiz_0_clk_out1 1 3 1 1010 720n
+preplace netloc constant_dds_dout 1 3 1 1030J 920n
+preplace netloc constant_dds_reset_dout 1 3 1 1040J 940n
+preplace netloc constant_red_pixel_dout 1 5 1 1720J 510n
+preplace netloc mux_select_0_1 1 0 4 NJ 850 NJ 850 NJ 850 970J
+preplace netloc proc_sys_reset_0_peripheral_aresetn 1 2 1 680 420n
+preplace netloc proc_sys_reset_fclk0_peripheral_aresetn 1 2 4 690 320 990 410 1420 340 1710J
+preplace netloc v_tc_out_active_video_out 1 4 3 N 220 NJ 220 2110
+preplace netloc v_tc_out_hsync_out 1 4 3 N 240 NJ 240 2140
+preplace netloc v_tc_out_irq 1 0 5 20 270 NJ 270 670J 70 NJ 70 1360
+preplace netloc v_tc_out_vsync_out 1 4 3 N 260 NJ 260 2150
+preplace netloc video_transform_0_Video_out 1 6 1 2100 210n
+preplace netloc xlconcat_0_dout 1 1 1 200 170n
+preplace netloc audio_passthrough_0_m00_axis 1 4 1 1410 400n
+preplace netloc axi_iic_0_IIC 1 4 4 NJ 660 NJ 660 NJ 660 NJ
+preplace netloc axis_fifo_0_m00_axis 1 5 1 1720 440n
+preplace netloc processing_system7_0_DDR 1 2 6 670J 50 NJ 50 NJ 50 NJ 50 NJ 50 NJ
+preplace netloc processing_system7_0_FIXED_IO 1 2 6 NJ 80 NJ 80 NJ 80 NJ 80 NJ 80 NJ
+preplace netloc processing_system7_0_IIC_0 1 2 6 NJ 100 NJ 100 NJ 100 NJ 100 NJ 100 2410J
+preplace netloc processing_system7_0_M_AXI_GP0 1 2 1 680 140n
+preplace netloc ps7_0_axi_periph_M00_AXI 1 3 1 N 470
+preplace netloc ps7_0_axi_periph_M01_AXI 1 3 1 970 160n
+preplace netloc ps7_0_axi_periph_M02_AXI 1 3 1 980 510n
+preplace netloc ps7_0_axi_periph_M03_AXI 1 3 1 970 530n
+preplace netloc rgb2dvi_2_TMDS 1 7 1 N 260
+preplace netloc rgb2dvi_0_TMDS 1 7 1 N 500
+levelinfo -pg 1 0 110 430 830 1200 1570 1910 2280 2430
+pagesize -pg 1 -db -bbox -sgen -150 0 2590 1110
 "
 }
 {
    "da_axi4_cnt":"4",
-   "da_board_cnt":"1"
+   "da_board_cnt":"1",
+   "da_clkrst_cnt":"2"
 }

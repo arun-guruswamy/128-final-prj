@@ -62,9 +62,22 @@
       <data key="VT">AC</data>
     </node>
     <node id="n3">
-      <data key="TU">active</data>
-      <data key="VH">2</data>
-      <data key="VT">PM</data>
+      <data key="BA">0x43C00000</data>
+      <data key="BP">C_S_AXI_LITE_BASEADDR</data>
+      <data key="HA">0x43C0FFFF</data>
+      <data key="HP">C_S_AXI_LITE_HIGHADDR</data>
+      <data key="MA">Data</data>
+      <data key="MX">/processing_system7_0</data>
+      <data key="MI">M_AXI_GP0</data>
+      <data key="MS">SEG_axi_dynclk_0_S_AXI_LITE_reg</data>
+      <data key="MV">xilinx.com:ip:processing_system7:5.5</data>
+      <data key="TM">both</data>
+      <data key="SX">/axi_dynclk_0</data>
+      <data key="SI">S_AXI_LITE</data>
+      <data key="SS">S_AXI_LITE_reg</data>
+      <data key="SV">digilentinc.com:ip:axi_dynclk:1.1</data>
+      <data key="TU">register</data>
+      <data key="VT">AC</data>
     </node>
     <node id="n4">
       <data key="BA">0x41600000</data>
@@ -89,35 +102,22 @@
       <data key="VT">BC</data>
     </node>
     <node id="n6">
-      <data key="BA">0x43C00000</data>
-      <data key="BP">C_S_AXI_LITE_BASEADDR</data>
-      <data key="HA">0x43C0FFFF</data>
-      <data key="HP">C_S_AXI_LITE_HIGHADDR</data>
-      <data key="MA">Data</data>
-      <data key="MX">/processing_system7_0</data>
-      <data key="MI">M_AXI_GP0</data>
-      <data key="MS">SEG_axi_dynclk_0_S_AXI_LITE_reg</data>
-      <data key="MV">xilinx.com:ip:processing_system7:5.5</data>
-      <data key="TM">both</data>
-      <data key="SX">/axi_dynclk_0</data>
-      <data key="SI">S_AXI_LITE</data>
-      <data key="SS">S_AXI_LITE_reg</data>
-      <data key="SV">digilentinc.com:ip:axi_dynclk:1.1</data>
-      <data key="TU">register</data>
-      <data key="VT">AC</data>
+      <data key="TU">active</data>
+      <data key="VH">2</data>
+      <data key="VT">PM</data>
     </node>
     <edge id="e0" source="n5" target="n0"/>
-    <edge id="e1" source="n0" target="n3"/>
-    <edge id="e2" source="n6" target="n3">
+    <edge id="e1" source="n0" target="n6"/>
+    <edge id="e2" source="n1" target="n6">
       <data key="EH">2</data>
     </edge>
-    <edge id="e3" source="n4" target="n3">
+    <edge id="e3" source="n3" target="n6">
       <data key="EH">2</data>
     </edge>
-    <edge id="e4" source="n2" target="n3">
+    <edge id="e4" source="n4" target="n6">
       <data key="EH">2</data>
     </edge>
-    <edge id="e5" source="n1" target="n3">
+    <edge id="e5" source="n2" target="n6">
       <data key="EH">2</data>
     </edge>
   </graph>

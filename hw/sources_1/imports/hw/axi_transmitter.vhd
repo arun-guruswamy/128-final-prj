@@ -19,7 +19,6 @@ entity axi_transmitter is
 		
 		m00_axis_tvalid   : out std_logic;
 		m00_axis_tdata    : out std_logic_vector(DATA_WIDTH-1 downto 0);
-		m00_axis_tstrb    : out std_logic_vector((DATA_WIDTH/8)-1 downto 0);
 		m00_axis_tlast    : out std_logic
 		);		
 end axi_transmitter;
@@ -95,7 +94,6 @@ end process;
 -- AXIS output assignments
 m00_axis_tdata  <= data_out;
 m00_axis_tvalid <= valid_int;
-m00_axis_tstrb  <= (others => '1');
 m00_axis_tlast  <= '0';  -- leave tlast to FIFO or external logic
 
 end Behavioral;

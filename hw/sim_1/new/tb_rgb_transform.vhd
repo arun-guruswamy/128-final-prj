@@ -15,6 +15,8 @@ signal s_axis_clk    : std_logic := '0';
 signal s_axis_resetn : std_logic := '0';
 signal peak_bin      : std_logic_vector(8 downto 0) := (others => '0');
 signal video_in      : std_logic_vector(C_VIDEO_DATA_WIDTH-1 downto 0) := (others => '0');
+signal active_video_out: std_logic := '0';
+signal mute_en_not : std_logic := '1';
 
 -- DUT output
 signal video_out     : std_logic_vector(C_VIDEO_DATA_WIDTH-1 downto 0);
@@ -25,11 +27,13 @@ component rgb_transform
         C_VIDEO_DATA_WIDTH : integer := 24
     );
     port (
-        s_axis_clk    : in  std_logic;
-        s_axis_resetn : in  std_logic;
-        peak_bin      : in  std_logic_vector(8 downto 0);
-        video_in      : in  std_logic_vector(C_VIDEO_DATA_WIDTH-1 downto 0);
-        video_out     : out std_logic_vector(C_VIDEO_DATA_WIDTH-1 downto 0)
+        s_axis_clk    : IN  STD_LOGIC;
+        s_axis_resetn : IN  STD_LOGIC;
+        mute_en_not   : IN  STD_LOGIC;
+        active_video_out : IN STD_LOGIC;  -- high only when active frame is drawing
+        peak_bin      : IN  STD_LOGIC_VECTOR(8 DOWNTO 0);
+        video_in      : IN  STD_LOGIC_VECTOR(C_VIDEO_DATA_WIDTH-1 downto 0);
+        video_out     : OUT STD_LOGIC_VECTOR(C_VIDEO_DATA_WIDTH-1 downto 0)
     );
 end component;
 
@@ -43,6 +47,8 @@ dut_rgb_transform : rgb_transform
     port map (
         s_axis_clk    => s_axis_clk,
         s_axis_resetn => s_axis_resetn,
+        mute_en_not   => mute_en_not,
+        active_video_out => active_video_out,
         peak_bin      => peak_bin,
         video_in      => video_in,
         video_out     => video_out
@@ -69,6 +75,7 @@ begin
     wait for 20 ns;
 
     -- ==== First pattern: 2 black, 1 non-black, 2 black ====
+    active_video_out <= '1';
     video_in <= x"000000";
     wait for 80 ns;
 
@@ -84,23 +91,32 @@ begin
 
     video_in <= x"000000";
     wait for 80 ns;
+    active_video_out <= '0';
+    
+    wait for 80 ns;
 
     -- ==== Second pattern: 1 black, 3 non-black, 1 black ====
+    active_video_out <= '1';
     video_in <= x"000000";
     wait for 80 ns;
 
     peak_bin <= std_logic_vector(to_unsigned(200, 9));
     video_in <= x"445566";
-    wait for 80 ns;
+    wait for 40 ns;
+    peak_bin <= std_logic_vector(to_unsigned(250, 9));
+    wait for 40 ns;
 
     video_in <= x"778899";
-    wait for 80 ns;
+    wait for 40 ns;
+    peak_bin <= std_logic_vector(to_unsigned(130, 9));
+    wait for 40 ns;
 
     video_in <= x"99aabb";
     wait for 80 ns;
 
     video_in <= x"000000";
     wait for 80 ns;
+    active_video_out <= '0';
 
     wait;
 end process;
