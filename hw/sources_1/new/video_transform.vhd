@@ -24,10 +24,7 @@ entity video_transform is
         s_axis_audio_tvalid     : in std_logic;
         s_axis_audio_tlast      : in std_logic;
         s_axis_audio_tready     : out std_logic;
-        mute_en_not             : in std_logic;
-
-        -- Amplitude
-        m_axis_amp_tdata    : out std_logic_vector(C_OUTPUT_DATA_WIDTH-1 downto 0)
+        mute_en_not             : in std_logic
     );
 end video_transform;
 
@@ -198,10 +195,6 @@ end process;
 
 s_axis_data_tdata_int(47 downto 24) <= s_axis_audio_tdata(31 downto 8);  -- Real
 s_axis_data_tdata_int(23 downto 0)  <= (others => '0');                  -- Imag
-
-
--- For testing
-m_axis_amp_tdata <= (others => '0');
 
 
 end Behavioral;

@@ -30,7 +30,7 @@ entity rms is
   Port (
     clk : in std_logic;
     audio_in : in std_logic_vector(23 downto 0);
-    amplitude : out std_logic_vector(47 downto 0) 
+    amplitude : out std_logic_vector(3 downto 0) 
   );
 end rms;
 
@@ -44,6 +44,14 @@ architecture Behavioral of rms is
   constant INPUT_WIDTH : integer := 24;
   constant SQUARED_WIDTH : integer := 48; -- 24 * 2 = 48 bits
   constant ACCUM_WIDTH : integer := SQUARED_WIDTH + WINDOW_SIZE_BITS; -- 48 + 10 = 58 bits
+  constant SCALED_AMP_WIDTH   : integer := 4; -- Desired width for the output amplitude
+  -- Scaling Configuration
+  -- Approx. MSB position of power for a full-scale sine wave (A^2/2) is (2*(INPUT_WIDTH-1)-1) = 45
+  -- We want this to map to the MSB of our SCALED_AMP_WIDTH output (bit SCALED_AMP_WIDTH-1)
+  constant POWER_MSB_APPROX_POS : integer := 2 * (INPUT_WIDTH - 1) - 1; -- e.g., 45 for 24-bit input
+  constant SHIFT_FOR_SCALING    : integer := POWER_MSB_APPROX_POS - (SCALED_AMP_WIDTH - 1);
+                                          -- e.g., for 4-bit output: 45 - (4-1) = 45 - 3 = 42
+
 
   -- Internal Signals
   signal s_audio_signed : signed(INPUT_WIDTH - 1 downto 0);
@@ -77,6 +85,6 @@ begin
     end if;
   end process;
 
-  amplitude <= std_logic_vector(s_mean_square_out);
+  amplitude <= std_logic_vector(resize(s_mean_square_out srl SHIFT_FOR_SCALING, SCALED_AMP_WIDTH));
 
 end Behavioral;
