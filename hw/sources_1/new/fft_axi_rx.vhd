@@ -46,13 +46,13 @@ begin
             max_mag_var       <= (others => '0');
             peak_bin_var      <= (others => '0');
 
-        elsif s_axis_data_tvalid = '1' then
-        
+        elsif s_axis_data_tvalid = '1' then    
             mag_temp := 
                 unsigned(signed(s_axis_data_tdata(23 downto 0)) * signed(s_axis_data_tdata(23 downto 0))) +
                 unsigned(signed(s_axis_data_tdata(47 downto 24)) * signed(s_axis_data_tdata(47 downto 24)));
             
             if half_counter < 255 then -- Switch to only counting in real half 
+                half_counter <= half_counter + 1;
                 if mag_temp > max_mag_var then
                     max_mag_var  <= mag_temp;
                     peak_bin_var <= s_axis_data_tuser(7 downto 0);
@@ -70,9 +70,7 @@ begin
                 max_mag_var  <= (others => '0');
                 peak_bin_var <= (others => '0');
                 half_counter      <= 0;
-            end if;
-            
-            half_counter <= half_counter + 1;
+            end if;    
         end if;
     end if;
 end process; 

@@ -253,8 +253,7 @@ video_transform_inst : entity work.video_transform
         s_axis_audio_tdata   => axis_rx_data,
         s_axis_audio_tvalid  => axis_rx_valid,
         s_axis_audio_tlast   => axis_rx_last,
-        s_axis_audio_tready  => axis_rx_ready,
-        m_axis_amp_tdata     => open
+        s_axis_audio_tready  => axis_rx_ready
     );
 
 -- AXI system clock (100 MHz)

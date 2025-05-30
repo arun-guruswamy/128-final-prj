@@ -37,7 +37,7 @@ architecture sim of tb_rms is
             ac_adc_data_i  : in STD_LOGIC;
             ac_adc_lrclk_o : out STD_LOGIC;
 
-            amplitude_o : out std_logic_vector(3 downto 0);
+            amplitude_o : out std_logic_vector(2 downto 0);
 
             -- Axi Responder/Slave Bus Interface S00_AXI
             dds_enable_i    : in std_logic;
@@ -151,7 +151,7 @@ architecture sim of tb_rms is
     signal axi_reg                  : integer := 0;
 
     -- RMS output signal
-    signal amplitude_int : std_logic_vector(3 downto 0);
+    signal amplitude_int : std_logic_vector(2 downto 0);
 
     ----------------------------------------------------------------------------
     -- Procedures for driving the AXI bus (Unchanged)

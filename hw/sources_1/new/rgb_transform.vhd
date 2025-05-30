@@ -53,7 +53,7 @@ rom_inst : blk_mem_gen_1
 process(s_axis_clk)
 begin
     if rising_edge(s_axis_clk) then
-        if s_axis_resetn = '0' or not(mute_en_not) = '1' then
+        if s_axis_resetn = '0' or mute_en_not = '1' then
             state           <= IDLE;
             video_out_reg   <= video_in;
             latch_ready     <= '0';
@@ -61,7 +61,7 @@ begin
             case state is
                 when IDLE =>
                     if active_video_out = '1' then
-                        if video_in /= x"000000" then
+                        if video_in = x"f63f0f" then
                             if latch_ready = '0' then
                                 -- First non black pixel of frame
                                 addra       <= peak_bin;
