@@ -1,6 +1,6 @@
 library ieee;
-use ieee.std_logic_1164.all;
-
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;     
 ----------------------------------------------------------------------------
 -- Entity definition
 entity axis_fifo is
@@ -63,7 +63,12 @@ signal frame_ready  : std_logic := '0';
 signal streaming_active : std_logic := '0';
 signal stream_done : std_logic := '0';
 
-
+type gather_state_t is (IDLE, FETCH, APPLY);
+signal gather_state : gather_state_t := IDLE;
+signal gather_index_reg1, gather_index_reg2 : integer range 0 to 511 := 0;
+signal raw_sample_reg : std_logic_vector(23 downto 0);
+signal han_addr_i : STD_LOGIC_VECTOR(8 DOWNTO 0) := (others => '0');
+signal han_o : STD_LOGIC_VECTOR(23 DOWNTO 0) := (others => '0');
 
 ----------------------------------------------------------------------------
 -- Component Declarations
@@ -83,6 +88,14 @@ component fifo is
         full_o          : out std_logic);   
 end component fifo;
 
+
+COMPONENT blk_mem_gen_HanWindow
+  PORT (
+    clka : IN STD_LOGIC;
+    addra : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
+    douta : OUT STD_LOGIC_VECTOR(23 DOWNTO 0)
+  );
+END COMPONENT;
 ----------------------------------------------------------------------------
 begin
 
@@ -104,10 +117,22 @@ fifo_inst : fifo
         empty_o     => fifo_empty,
         full_o      => fifo_full
     );
+    
+HanWindow : blk_mem_gen_HanWindow
+  PORT MAP (
+    clka => s00_axis_aclk,
+    addra => han_addr_i,
+    douta => han_o
+  );
 ----------------------------------------------------------------------------
 -- Logic
 ----------------------------------------------------------------------------  
 process(s00_axis_aclk)
+    variable sample      : signed(23 downto 0);
+    variable coeff       : signed(23 downto 0);
+    variable sample_ext  : signed(47 downto 0);
+    variable coeff_ext   : signed(47 downto 0);
+    variable product     : signed(47 downto 0);
 begin
     if rising_edge(s00_axis_aclk) then
         if fifo_reset = '1' then
@@ -127,18 +152,50 @@ begin
                     stream_index        <= 0;
                     stream_done         <= '0';
 
-                    if fifo_rd_en = '1' and fifo_empty = '0' then
-                        buffer_array(gather_index) <= read_data_int;
+                    case gather_state is
 
-                        if gather_index = 511 then
-                            gather_index  <= 0;
-                            frame_ready   <= '1';
-                            current_state <= STREAM;  -- immediate transition
-                        else
-                            gather_index  <= gather_index + 1;
-                            frame_ready   <= '0';
-                        end if;
-                    end if;
+                        when IDLE =>
+                            if fifo_empty = '0' then
+                                -- Start ROM access
+                                han_addr_i        <= std_logic_vector(to_unsigned(gather_index, 9));
+                                gather_index_reg1 <= gather_index;
+                                raw_sample_reg    <= read_data_int(31 downto 8);  -- Extract 24-bit audio
+                                gather_state      <= FETCH;
+                            end if;
+                    
+                        when FETCH =>
+                            -- Wait 1st ROM latency cycle
+                            gather_index_reg2 <= gather_index_reg1;
+                            gather_state      <= APPLY;
+                    
+                        when APPLY =>
+                            -- Wait 2nd ROM latency cycle, multiply with coeff, store in buffer
+                    
+                            sample     := signed(raw_sample_reg);
+                            coeff      := signed(han_o);
+                            sample_ext := "000000000000000000000000" & sample;
+                            coeff_ext  := "000000000000000000000000" & coeff;
+                            product    := sample_ext * coeff_ext;
+                            
+                            --product := product * ("000000000000000000000000" & coeff);
+                            
+                    
+                            buffer_array(gather_index_reg2)(31 downto 8) <= std_logic_vector(product(46 downto 23));
+                            buffer_array(gather_index_reg2)(7 downto 0)  <= (others => '0');  -- zero out LSBs for safety
+                    
+                            if gather_index = 511 then
+                                gather_index  <= 0;
+                                frame_ready   <= '1';
+                                current_state <= STREAM;
+                                gather_state  <= IDLE;
+                            else
+                                gather_index  <= gather_index + 1;
+                                frame_ready   <= '0';
+                                gather_state  <= IDLE;
+                            end if;
+                    
+                    end case;
+
 
                 when STREAM =>
                     frame_ready         <= '0';
