@@ -36,7 +36,7 @@ entity video_gen is
 Port ( 
    pxl_clk  : in  std_logic;
    hblank_i  : in std_logic;
-   fsync_i : in std_logic;
+   fsync_i : in STD_LOGIC_VECTOR(0 DOWNTO 0);
    active_video_i : in std_logic;
    amplitude : in std_logic_vector(2 downto 0);
    
@@ -84,7 +84,7 @@ begin
 pixel_counter : process(pxl_clk)
 begin
     if rising_edge(pxl_clk) then
-        if fsync_i = '1' then
+        if fsync_i = "1" then
             x_coord <= 0;
         elsif hblank_i = '0' then
                 x_coord <= 0;            
@@ -92,13 +92,13 @@ begin
                 x_coord <= x_coord + 1;
         end if;
         
-        if fsync_i = '1' then
+        if fsync_i = "1" then
             y_coord <= 0;
         elsif x_coord = 1 then                      
                 y_coord <= y_coord + 1;
         end if;  
            
-        if fsync_i = '1' then
+        if fsync_i = "1" then
            if (shape_x_position + 50) = 640 then
               x_speed <= -1;
 --              if to_integer(unsigned(amplitude)) = 0 then
@@ -117,7 +117,7 @@ begin
            shape_x_position <= shape_x_position + x_speed;    
         end if;   
         
-        if fsync_i = '1' then
+        if fsync_i = "1" then
            if (shape_y_position + 50) = 360 then
               y_speed <= -1;
 --              if to_integer(unsigned(amplitude)) = 0 then

@@ -53,7 +53,7 @@ rom_inst : blk_mem_gen_1
 process(s_axis_clk)
 begin
     if rising_edge(s_axis_clk) then
-        if s_axis_resetn = '0' or mute_en_not = '1' then
+        if s_axis_resetn = '0' or not(mute_en_not) = '1' then
             state           <= IDLE;
             video_out_reg   <= video_in;
             latch_ready     <= '0';
