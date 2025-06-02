@@ -70,7 +70,7 @@ begin
                         state <= IDLE;
                     end if;
                 when IDLE => 
-                    if video_in /= x"000000" then
+                    if video_in = x"f63f0f" then
                         if latch_ready = '0' and update_enable = '1' then
                             -- First non black pixel of frame
                             addra       <= peak_bin(7 downto 0);
