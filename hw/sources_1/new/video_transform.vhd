@@ -14,7 +14,8 @@ entity video_transform is
     port (
         -- Video 
         Video_in  : in  std_logic_vector(C_VIDEO_DATA_WIDTH-1 downto 0);
-        active_video_out : IN STD_LOGIC;
+        fsync_i : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+        vsync_i : std_logic;
         Video_out  : out  std_logic_vector(C_VIDEO_DATA_WIDTH-1 downto 0);
 
         -- AXI Stream Audio Input
@@ -81,7 +82,8 @@ COMPONENT rgb_transform
         s_axis_clk    : IN  STD_LOGIC;
         s_axis_resetn : IN  STD_LOGIC;
         mute_en_not   : IN  STD_LOGIC;
-        active_video_out : IN STD_LOGIC;
+        fsync_i : IN STD_LOGIC_VECTOR(0 DOWNTO 0);  -- high only when active frame is drawing
+        vsync_i : std_logic;
         peak_bin      : IN  STD_LOGIC_VECTOR(8 DOWNTO 0);
         video_in      : IN  STD_LOGIC_VECTOR(C_VIDEO_DATA_WIDTH-1 downto 0);
         video_out     : OUT STD_LOGIC_VECTOR(C_VIDEO_DATA_WIDTH-1 downto 0)
@@ -157,7 +159,8 @@ RGB : rgb_transform
     s_axis_clk => s_axis_audio_aclk,
     s_axis_resetn => s_axis_audio_aresetn,
     mute_en_not => mute_en_not,
-    active_video_out => active_video_out,
+    fsync_i => fsync_i,
+    vsync_i => vsync_i,
     peak_bin => peak_bin_int,
     video_in => Video_in,
     video_out => Video_out

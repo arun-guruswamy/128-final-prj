@@ -92,7 +92,7 @@ begin
 
   for i in 0 to 511 loop
     wait until rising_edge(clk);
-    s_tdata  <= std_logic_vector(to_unsigned(i, DATA_WIDTH));
+    s_tdata <= std_logic_vector(to_unsigned(i, 24)) & x"00";
     s_tvalid <= '1';
 
     wait until rising_edge(clk);
