@@ -89,7 +89,7 @@ component fifo is
 end component fifo;
 
 
-COMPONENT blk_mem_gen_HanWindow
+COMPONENT blk_mem_gen_2
   PORT (
     clka : IN STD_LOGIC;
     addra : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
@@ -118,7 +118,7 @@ fifo_inst : fifo
         full_o      => fifo_full
     );
     
-HanWindow : blk_mem_gen_HanWindow
+HanWindow : blk_mem_gen_2
   PORT MAP (
     clka => s00_axis_aclk,
     addra => han_addr_i,
@@ -130,8 +130,6 @@ HanWindow : blk_mem_gen_HanWindow
 process(s00_axis_aclk)
     variable sample      : signed(23 downto 0);
     variable coeff       : signed(23 downto 0);
-    variable sample_ext  : signed(47 downto 0);
-    variable coeff_ext   : signed(47 downto 0);
     variable product     : signed(47 downto 0);
 begin
     if rising_edge(s00_axis_aclk) then
@@ -173,12 +171,7 @@ begin
                     
                             sample     := signed(raw_sample_reg);
                             coeff      := signed(han_o);
-                            sample_ext := "000000000000000000000000" & sample;
-                            coeff_ext  := "000000000000000000000000" & coeff;
-                            product    := sample_ext * coeff_ext;
-                            
-                            --product := product * ("000000000000000000000000" & coeff);
-                            
+                            product    := sample * coeff;                                         
                     
                             buffer_array(gather_index_reg2)(31 downto 8) <= std_logic_vector(product(46 downto 23));
                             buffer_array(gather_index_reg2)(7 downto 0)  <= (others => '0');  -- zero out LSBs for safety
