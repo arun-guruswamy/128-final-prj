@@ -14,7 +14,8 @@ entity video_transform is
     port (
         -- Video 
         Video_in  : in  std_logic_vector(C_VIDEO_DATA_WIDTH-1 downto 0);
-        active_video_out : IN STD_LOGIC;
+        fsync_i : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+        vsync_i : std_logic;
         Video_out  : out  std_logic_vector(C_VIDEO_DATA_WIDTH-1 downto 0);
 
         -- AXI Stream Audio Input
@@ -24,7 +25,10 @@ entity video_transform is
         s_axis_audio_tvalid     : in std_logic;
         s_axis_audio_tlast      : in std_logic;
         s_axis_audio_tready     : out std_logic;
-        mute_en_not             : in std_logic
+        mute_en_not             : in std_logic;
+
+        -- Amplitude
+        m_axis_amp_tdata    : out std_logic_vector(C_OUTPUT_DATA_WIDTH-1 downto 0)
     );
 end video_transform;
 
@@ -65,7 +69,8 @@ COMPONENT fft_axi_rx
     s_axis_data_tready  : OUT STD_LOGIC;
     s_axis_data_tlast   : IN STD_LOGIC;
     
-    peak_bin            : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+    peak_freq_mag       : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    peak_bin            : OUT STD_LOGIC_VECTOR(8 DOWNTO 0)
     );
 end COMPONENT;
 -------------------- RGB_TRANSFORM Component --------------------
@@ -77,8 +82,9 @@ COMPONENT rgb_transform
         s_axis_clk    : IN  STD_LOGIC;
         s_axis_resetn : IN  STD_LOGIC;
         mute_en_not   : IN  STD_LOGIC;
-        active_video_out : IN STD_LOGIC;
-        peak_bin      : IN  STD_LOGIC_VECTOR(7 DOWNTO 0);
+        fsync_i : IN STD_LOGIC_VECTOR(0 DOWNTO 0);  -- high only when active frame is drawing
+        vsync_i : std_logic;
+        peak_bin      : IN  STD_LOGIC_VECTOR(8 DOWNTO 0);
         video_in      : IN  STD_LOGIC_VECTOR(C_VIDEO_DATA_WIDTH-1 downto 0);
         video_out     : OUT STD_LOGIC_VECTOR(C_VIDEO_DATA_WIDTH-1 downto 0)
     );
@@ -106,7 +112,7 @@ signal event_frame_started, event_tlast_unexpected, event_tlast_missing, event_s
 
 
 -- FFT_AXI_RX
-signal peak_bin_int : std_logic_vector(7 DOWNTO 0) := (others => '0');
+signal peak_bin_int : std_logic_vector(8 DOWNTO 0) := (others => '0');
 
 begin
 
@@ -143,6 +149,7 @@ FFT_AXI : fft_axi_rx
     s_axis_data_tready => m_axis_data_tready,
     s_axis_data_tlast => m_axis_data_tlast,
     
+    peak_freq_mag => open,
     peak_bin => peak_bin_int
     );
 
@@ -152,7 +159,8 @@ RGB : rgb_transform
     s_axis_clk => s_axis_audio_aclk,
     s_axis_resetn => s_axis_audio_aresetn,
     mute_en_not => mute_en_not,
-    active_video_out => active_video_out,
+    fsync_i => fsync_i,
+    vsync_i => vsync_i,
     peak_bin => peak_bin_int,
     video_in => Video_in,
     video_out => Video_out
@@ -195,6 +203,10 @@ end process;
 
 s_axis_data_tdata_int(47 downto 24) <= s_axis_audio_tdata(31 downto 8);  -- Real
 s_axis_data_tdata_int(23 downto 0)  <= (others => '0');                  -- Imag
+
+
+-- For testing
+m_axis_amp_tdata <= (others => '0');
 
 
 end Behavioral;

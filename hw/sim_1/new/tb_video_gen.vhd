@@ -28,9 +28,10 @@ architecture Behavioral of video_gen_tb is
     component video_gen
         Port (
             pxl_clk         : in  std_logic;
-            vsync_i : in std_logic;
+            hblank_i  : in std_logic;
+            fsync_i : in STD_LOGIC_VECTOR(0 DOWNTO 0);
             active_video_i  : in  std_logic;
-            toggle          : in  std_logic;
+            amplitude : in std_logic_vector(2 downto 0);
             pxl_o           : out std_logic_vector(23 downto 0)
         );
     end component;
@@ -57,7 +58,8 @@ architecture Behavioral of video_gen_tb is
             vsync_out       : out std_logic;
             hblank_out      : out std_logic;
             vblank_out      : out std_logic;
-            active_video_out: out std_logic
+            active_video_out: out std_logic;
+            fsync_out       : out std_logic_vector(0 downto 0)
             -- Add other VTC outputs if needed (e.g., field_id_out)
         );
     end component;
@@ -80,6 +82,7 @@ architecture Behavioral of video_gen_tb is
     signal tb_vtc_vsync         : std_logic;
     signal tb_vtc_hblank        : std_logic;
     signal tb_vtc_vblank        : std_logic;
+    signal tb_fsync             : std_logic_vector(0 downto 0);
     -- tb_active_video_i will effectively be tb_vtc_active_video
 
     -- Clock period definition
@@ -106,16 +109,19 @@ begin
             vsync_out       => tb_vtc_vsync,
             hblank_out      => tb_vtc_hblank,
             vblank_out      => tb_vtc_vblank,
-            active_video_out=> tb_active_video_i -- << KEY: VTC output drives video_gen input
+            active_video_out=> tb_active_video_i, -- << KEY: VTC output drives video_gen input
+            fsync_out => tb_fsync
         );
 
     -- Instantiate the Device Under Test (DUT) - video_gen
     dut_video_gen : video_gen
         port map (
             pxl_clk        => tb_pxl_clk,
-            vsync_i => tb_vtc_vsync,
+            hblank_i  => tb_vtc_hblank,
+            fsync_i => tb_fsync,
             active_video_i => tb_active_video_i, -- Driven by VTC_INST
-            toggle         => tb_toggle,
+            amplitude => "000",
+
             pxl_o          => tb_pxl_o
         );
 
