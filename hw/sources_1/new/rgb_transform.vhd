@@ -31,7 +31,7 @@ COMPONENT blk_mem_gen_1
 END COMPONENT;
 
 type state_type is (IDLE_fsync, IDLE, WAIT1, WAIT2);
-signal state : state_type := IDLE;
+signal state : state_type := IDLE_fsync;
 
 signal addra         : STD_LOGIC_VECTOR(7 DOWNTO 0) := (others => '0');
 signal douta         : STD_LOGIC_VECTOR(23 DOWNTO 0) := (others => '0');
@@ -39,9 +39,11 @@ signal video_out_reg : STD_LOGIC_VECTOR(23 downto 0) := (others => '0');
 signal latch_ready      : STD_LOGIC := '0';
 signal fsync_int : std_logic := '0';
 signal fsync_prev      : std_logic := '0';
+signal vsync_prev : std_logic := '0';
+signal vsync_rise : std_logic := '0';
 
 signal frame_counter : integer range 0 to 255 := 0;
-signal update_enable : std_logic := '0';
+signal update_enable : std_logic := '1';
 
 
 begin
@@ -60,7 +62,7 @@ process(s_axis_clk)
 begin
     if rising_edge(s_axis_clk) then
         if s_axis_resetn = '0' or not(mute_en_not) = '1' then
-            state           <= IDLE;
+            state           <= IDLE_fsync;
             video_out_reg   <= video_in;
             latch_ready     <= '0';
         else
@@ -99,18 +101,11 @@ begin
             end case;
 
             -- Reset latch_ready when video goes inactive
-            if vsync_i = '0' then
-                if frame_counter = 12 then  -- ~0.5s at 48 fps
-                    latch_ready   <= '0';
-                    update_enable <= '1';
-                    frame_counter <= 0;
-                    state         <= IDLE_fsync;
-                else
-                    update_enable <= '0';
-                    frame_counter <= frame_counter + 1;
-                end if;
+            if vsync_rise = '1' then
+                latch_ready   <= '0';
+                update_enable <= '1';
+                state         <= IDLE_fsync;
             end if;
-
         end if;
     end if;
 end process;
@@ -126,6 +121,16 @@ begin
   end if;
 end process;
 
+process(s_axis_clk)
+begin
+    if rising_edge(s_axis_clk) then
+        vsync_rise <= '0';
+        if vsync_i = '1' and vsync_prev = '0' then
+            vsync_rise <= '1';
+        end if;
+        vsync_prev <= vsync_i;
+    end if;
+end process;
 
 video_out <= video_out_reg;
 

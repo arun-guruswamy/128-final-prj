@@ -86,7 +86,7 @@ begin
     if rising_edge(pxl_clk) then
         if fsync_i = "1" then
             x_coord <= 0;
-        elsif hblank_i = '0' then
+        elsif hblank_i = '0' then -- '1' for sim, '0' for hardware
                 x_coord <= 0;            
         elsif active_video_i = '1' then
                 x_coord <= x_coord + 1;
